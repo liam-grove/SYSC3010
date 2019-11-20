@@ -1,6 +1,10 @@
 package gem;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -148,34 +152,38 @@ public class Login extends javax.swing.JFrame {
         //Get user entered data from username and password fields 
         String username = UsernameTextField.getText();
         String password = PasswordField.getPassword().toString();
-        
-        ArrayList<String> names = requestData("Username");
-        
-        //look for the username in the database 
-        int rowNumber = checkUsername(username);
-        
-        //if the username is found in the database 
-        if (rowNumber != 0)
-        {
-            //check if the password if correct 
-            if (checkPassword(rowNumber, password) == true)
-            {
-                //open new window 
-                dispose();
-                new Main().setVisible(true);
-            }
-            else 
-            {
-                JOptionPane.showMessageDialog(null,"Invalid Login Details", "Login Error", JOptionPane.ERROR_MESSAGE);
-                UsernameTextField.setText(null);
-                PasswordField.setText(null);
                 
+        String query = "SELECT Username,Password from login_information WHERE Username = '" + username +"' AND Password = '" + password +"'";
+        //look for the username in the database 
+        ResultSet rs = LinkJavaMySQL.selectQuery(query); 
+        String[] data = new String[2];
+        try {
+            while(rs.next()){
+                String user = rs.getString("Username");
+                String pass = rs.getString("Password");
+                data[0] = user;
+                data[1] = pass;
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if(data[0] == null)
+        {
+            //username and password not found 
+            JOptionPane.showMessageDialog(null,"Invalid Login Details", "Login Error", JOptionPane.ERROR_MESSAGE);
+            UsernameTextField.setText(null);
+            PasswordField.setText(null);
+            
         }
         else 
         {
-            //display message that account with that username doesnt exist 
+            //open new window 
+                dispose();
+                new Main().setVisible(true);
+        
         }
+
         
     }                                           
 
