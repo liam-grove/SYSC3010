@@ -10,7 +10,8 @@ import java.sql.Statement;
 public class LinkJavaMySQL {
     
     //JDBC URL, username and password of MySQL server
-    private static final String url = "jdbc:mysql://134.117.249.1:3306/greenhouse";
+    private static final String driver = "com.mysql.jdbc.Driver";
+    private static final String url = ""jdbc:mysql://localhost:3306/greenhouse"";
     private static final String user = "natalie";
     private static final String password = "password";
     
@@ -27,6 +28,7 @@ public class LinkJavaMySQL {
     public ResultSet selectQuery(String query) {
         
         try {
+            Class.forName(driver);
             //open database connection
             con = DriverManager.getConnection(url, user, password);
             
@@ -39,9 +41,9 @@ public class LinkJavaMySQL {
         } catch (SQLException sqlEx) {
             sqlEx.printStackTrace();
         } finally {
-            try { con.close(); } catch(SQLException se) { /*can't do anything */ }
-            try { stmt.close(); } catch(SQLException se) { /*can't do anything */ }
-            try { rs.close(); } catch(SQLException se) { /*can't do anything */ }
+            //try { con.close(); } catch(SQLException se) { /*can't do anything */ }
+            //try { stmt.close(); } catch(SQLException se) { /*can't do anything */ }
+            //try { rs.close(); } catch(SQLException se) { /*can't do anything */ }
         }
         
         return rs;
@@ -52,6 +54,7 @@ public class LinkJavaMySQL {
         boolean result = true;
         
         try {
+            Class.forName(driver);
             //open database connection
             con = DriverManager.getConnection(url, user, password);
             
@@ -66,8 +69,9 @@ public class LinkJavaMySQL {
             result = false;
             
         } finally {
-            try { con.close(); } catch(SQLException se) { /*can't do anything */ }
-            try { stmt.close(); } catch(SQLException se) { /*can't do anything */ }
+            //try { con.close(); } catch(SQLException se) { /*can't do anything */ }
+            //try { stmt.close(); } catch(SQLException se) { /*can't do anything */ }
+            //try { rs.close(); } catch(SQLException se) { /*can't do anything */ }
         }
         
         return result;
