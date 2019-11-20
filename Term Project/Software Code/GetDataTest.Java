@@ -98,19 +98,20 @@ public class GetDataTest {
     @Test
     public void testSendMessageToServer() {
         GetData instance = new GetData();
-        String query = "SELECT Username, Date, Time, Temperature, Humidity, LightLevel FROM collected_data WHERE Username = 'natalie'";
+        String query = "SELECT Username, Date, Time, Temperature, Humidity, LightLevel FROM collected_data";
         byte[] expResult = query.getBytes();
         byte[] result = instance.sendMessageToServer(query);
         assertArrayEquals(expResult, result);
     }
 
     /**
-     * Test of receiveMessageFromServer method
+     * Test of receiveMessageFromServer method which is testing how the control pi receives
      */
     @Test
     public void testReceiveMessageFromServer() {
+        GetData instance = new GetData();
         byte[] message = null;
-        String expResult = "";
+        String expResult = "SELECT Username, Date, Time, Temperature, Humidity, LightLevel FROM collected_data";
         String result = GetData.receiveMessageFromServer(message);
         assertEquals(expResult, result);
     }
