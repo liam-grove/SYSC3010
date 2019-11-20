@@ -1,12 +1,14 @@
-package gem;
+
+package controlpi;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-
+import java.lang.Character;
 /**
  *
  * @author Nirda
@@ -70,7 +72,11 @@ public class Login extends javax.swing.JFrame {
         LoginButton.setText("Log In ");
         LoginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                LoginButtonActionPerformed(evt);
+                try {
+                    LoginButtonActionPerformed(evt);
+                } catch (ClassNotFoundException ex) {
+                    System.out.println(ex);
+                }
             }
         });
 
@@ -147,44 +153,42 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
     }                                                 
 
-    private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {                                            
+    private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) throws ClassNotFoundException {                                            
         
         //Get user entered data from username and password fields 
         String username = UsernameTextField.getText();
-        String password = PasswordField.getPassword().toString();
-                
-        String query = "SELECT Username,Password from login_information WHERE Username = '" + username +"' AND Password = '" + password +"'";
-        //look for the username in the database 
-        ResultSet rs = LinkJavaMySQL.selectQuery(query); 
-        String[] data = new String[2];
+        char[] pass = PasswordField.getPassword();
+        String password = new String(pass);
+        
+        String[] data = new String[2]; //created an array to store the login information in to verify login
         try {
+            String query = "SELECT Username,Password FROM login_information WHERE Username = '" + username + "' AND Password = '" + password + "'";
+            ResultSet rs = LinkJavaMySql.selectQuery(query);
+
             while(rs.next()){
                 String user = rs.getString("Username");
-                String pass = rs.getString("Password");
+                String passWord = rs.getString("Password");
                 data[0] = user;
-                data[1] = pass;
+                data[1] = passWord;
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        if(data[0] == null)
-        {
-            //username and password not found 
+            
+            if(data[0] != null)
+            {
+            //open new window 
+                dispose();
+                new Main().setVisible(true);
+            }
+            else 
+            {//username and password not found 
             JOptionPane.showMessageDialog(null,"Invalid Login Details", "Login Error", JOptionPane.ERROR_MESSAGE);
             UsernameTextField.setText(null);
             PasswordField.setText(null);
             
+            }
+            rs.close();
+        } catch (SQLException ex) {
+            System.out.println(ex);
         }
-        else 
-        {
-            //open new window 
-                dispose();
-                new Main().setVisible(true);
-        
-        }
-
-        
     }                                           
 
     private void PasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {                                              
