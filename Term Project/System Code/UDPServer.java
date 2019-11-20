@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gem;
 
 import java.net.*;
+import java.sql.ResultSet;
 
 class UDPServer
 {
@@ -18,15 +14,17 @@ class UDPServer
    private InetAddress AppAddress;
    private int AppPort;
    private int Port = 9876;
+   private LinkJavaMySQL link;
     
    public void main(String args[]) throws Exception
      {
+            //initialize socket and messages
             DatagramSocket serverSocket = new DatagramSocket(Port);
             byte[] receiveData = new byte[56];
             byte[] sendData = new byte[50];
             byte[] ack = {'A', 'C', 'K'};
             
-             while(true){
+            while(true){
                  
                  //create and receive incoming packet
                  DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
@@ -38,11 +36,9 @@ class UDPServer
                  representing a specific function, and data is the remaining 40 bytes making up the core
                  of the message**
                  **/
-                
+                 
+                //split incoming packet message into sections
                  String[] splitMessage = message.split(":");
-                 
-                 
-                 //split incoming packet message into sections
                  String source = splitMessage[0];
                  String destination = splitMessage[1];
                  String code = splitMessage[2];
@@ -59,21 +55,34 @@ class UDPServer
                      
                      //assign received packet data to source node
                      switch (source) {
-                         case "dpi":
+                         case "dpi": //if source is data pi, assign origin address to data pi
                              DataPiAddress = receivePacket.getAddress();
                              DataPiPort = receivePacket.getPort();
                              break;
-                         case "cpi":
+                         case "cpi": //if source is control pi, assign origin address to control pi
                              ControlPiAddress = receivePacket.getAddress();
                              ControlPiPort = receivePacket.getPort();
                              break;
-                         case "app":
+                         case "app": //if source is app, assign origin address to app
                              AppAddress = receivePacket.getAddress();
                              AppPort = receivePacket.getPort();
                              break;
-                         default:
+                         default: //if source does not match data pi, control pi or app, output error
                              System.out.println("Error: incompatible source address.");
                      }
+                     
+                 }
+                 //code is to insert data to database
+                 else if (code.equals("DB01")){
+                     
+                     link.insertQuery(data);
+                     
+                 }
+                 //code is to select data from database
+                 else if (code.equals("DB02")){
+                     
+                    ResultSet result = link.selectQuery(data);
+                    
                      
                  }
                  //other code
