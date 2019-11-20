@@ -33,8 +33,8 @@ public class GetData {
     private static String pass;
     
     /**
-     * 
-     * @return 
+     * Gets the name of the 
+     * @return usr
      */
     public static String getName(){
         return usr;
@@ -136,21 +136,22 @@ public class GetData {
      * @return 
      */
     public static byte[] sendMessageToServer(String query){
-        String source = "cpi";
-        String destination = "dtb";
-        String q = query;
+        String source = "cpi"; //The source is the control pi
+        String destination = "dtb"; //The destination is the database 
+        String q = query; //The query the database needs to process
         String message = source + destination + q;
         byte[] b = message.getBytes();
         return b;
     }
     
     /**
-     * 
+     * This method converts the string received from the 
      * @param message
      * @return 
      */
     public static String receiveMessageFromServer(byte[] message){
-        
-        return null;
+        //convert the message to string first
+        String str = new String(message, StandardCharsets.UTF_8);
+        return str;
     }
 }
