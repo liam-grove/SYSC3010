@@ -16,10 +16,6 @@
  */
 package controlpi;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -43,22 +39,34 @@ public class ControlPiTest {
     }
     
     @Test
-    public void testGetCurrentDataBad() {}
+    public void testGetCurrentDataBad() {
+    
+    }
     
     @Test
-    public void testInputOptimalConditionsOnTemp() {}
+    public void testInputOptimalConditionsOnTemp() {
+    
+    }
     
     @Test
-    public void testInputOptimalConditionsOnHumidity() {}
+    public void testInputOptimalConditionsOnHumidity() {
+    
+    }
     
     @Test
-    public void testInputOptimalConditionsOnLight() {}
+    public void testInputOptimalConditionsOnLight() {
+    
+    }
     
     @Test
-    public void testInputOptimalConditionsOnWaterTime() {}
+    public void testInputOptimalConditionsOnWaterTime() {
+    
+    }
     
     @Test
-    public void testInputOptimalConditionsOnWaterTimeInterval() {}
+    public void testInputOptimalConditionsOnWaterTimeInterval() {
+    
+    }
     
     @Test
     public void testLoginUsernameValid() {}
