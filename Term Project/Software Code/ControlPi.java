@@ -34,7 +34,37 @@ public class ControlPi {
         String[] login = GetData.getLoginInfo();
         return login;
     }
-   
+    
+    public static Object[][] getData(){
+        Object[][] data = new Object[9][6];
+        try{
+            String query = "SELECT Username, Date, Time, Temperature, Humidity, LightLevel FROM collected_data WHERE Username = '"+ usr +"'";
+            ResultSet rs = LinkJavaMySql.selectQuery(query);
+
+            int row = 0;
+            while(rs.next()){
+                String usern = rs.getString("Username");
+                Date date = rs.getDate("Date");
+                Time time = rs.getTime("Time");
+                Float temp = rs.getFloat("Temperature");
+                Float hum = rs.getFloat("Humidity");
+                int light = rs.getInt("LightLevel");
+                data[row][0] = usern;
+                data[row][1] = date;
+                data[row][2] = time;
+                data[row][3] = temp;
+                data[row][4] = hum;
+                data[row][5] = light; 
+                row++;
+            }
+
+            rs.close();
+        }
+        catch (Exception e){
+            System.out.println(e);
+        }
+        return data;
+    }
    /**
      * 
      * @param user
