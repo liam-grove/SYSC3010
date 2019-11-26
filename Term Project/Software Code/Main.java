@@ -75,13 +75,15 @@ public class Main extends javax.swing.JFrame {
         LiveFeedLabel.setFont(new java.awt.Font("Tempus Sans ITC", 1, 14)); // NOI18N
         LiveFeedLabel.setText("Live Feed");
 
-        CurrentTempLabel.setText("jLabel2");
+        CurrentTempLabel.setText(String.valueOf(ControlPi.getCurrentTemp()) + "°C");
 
-        CurrentHumidityLabel.setText("jLabel3");
+        CurrentHumidityLabel.setText(String.valueOf(ControlPi.getCurrentHum()));
 
-        CurrentLightLabel.setText("jLabel4");
+        CurrentLightLabel.setText(String.valueOf(ControlPi.getCurrentLightLevel()));
+        
+        DateFormat format = new SimpleDateFormat("HH:mm");
+        CurrentWaterLabel.setText(format.format(ControlPi.getLastWaterTime()));
 
-        CurrentWaterLabel.setText("jLabel5");
 
         javax.swing.GroupLayout PanelBLayout = new javax.swing.GroupLayout(PanelB);
         PanelB.setLayout(PanelBLayout);
@@ -142,6 +144,11 @@ public class Main extends javax.swing.JFrame {
         jLabel1.setText("Add Later");
 
         ChangeOptimalButton.setText("Change Optimal Conditons");
+        ChangeOptimalButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ChangeOptimalButtonActionPerformed(evt);
+            }
+        });
 
         CreateReportButton.setText("Create Report");
         CreateReportButton.addActionListener(new java.awt.event.ActionListener() {
@@ -213,7 +220,12 @@ public class Main extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>                        
-
+    
+    private void ChangeOptimalButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                   
+        // TODO add your handling code here:
+        
+    } 
+    
     private void CreateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                   
         // TODO add your handling code here:
     }                                                  
