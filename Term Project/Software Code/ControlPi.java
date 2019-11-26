@@ -104,8 +104,7 @@ public class ControlPi {
     
     /**
      * This method inputs the optimal time interval before the next watering of the plant occurs into the database
-     * @param timeStart
-     * @param timeEnd 
+     * @param timeInterval
      */
     public void inputOptimalConditionWaterInterval(int timeInterval){
         String query = "UPDATE optimal_conditions SET Optimal_WaterTimeInterval = "+timeInterval+" WHERE Username = '"+ GetData.usr +"'";
