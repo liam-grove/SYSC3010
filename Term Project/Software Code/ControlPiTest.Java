@@ -36,6 +36,9 @@ public class ControlPiTest {
         System.out.println(Arrays.deepToString(data));
     }
     
+    /**
+     * Test of getCurrentStats method, of class ControlPi.
+     */
     @Test
     public void testGetCurrentStats() {
        ControlPi instance = new ControlPi();
@@ -69,6 +72,10 @@ public class ControlPiTest {
     
     }
     
+    /**
+     * Test of inputOptimalConditionTemp method, of class ControlPi.
+     * @throws java.lang.Exception
+     */
     @Test
     public void testInputOptimalConditionsOnTemp() {
         Float expTemp = (float)36;
@@ -88,6 +95,10 @@ public class ControlPiTest {
         }
     }
     
+    /**
+     * Test of inputOptimalConditionHumidity method, of class ControlPi.
+     * @throws java.lang.Exception
+     */
     @Test
     public void testInputOptimalConditionsOnHumidity() {
         Float expHumidity = (float)30;
@@ -110,17 +121,67 @@ public class ControlPiTest {
     
     @Test
     public void testInputOptimalConditionsOnLight() {
-    
+        int lightLevel = 600;
+        ControlPi instance = new ControlPi();
+        instance.inputOptimalConditonLightLevel(lightLevel);
+        
+        String query = "SELECT * FROM optimal_conditions WHERE Username = '"+ GetData.usr +"'";
+        ResultSet rs = LinkJavaMySql.selectQuery(query);
+        int actLightLevel = 0;
+        while(rs.next()){
+            int light = rs.getInt("Optimal_LightLevel");
+            actLightLevel = light;
+        }
+        rs.close();
+        
+        if(!Objects.equals(actLightLevel, lightLevel)){
+            fail("The light test has failed");
+        }
     }
+    
     
     @Test
     public void testInputOptimalConditionsOnWaterTime() {
-    
+        int expWaterTime = 3;
+        ControlPi instance = new ControlPi();
+        instance.inputOptimalConditionWaterTime(expWaterTime);
+        
+        String query = "SELECT * FROM optimal_conditions WHERE Username = '"+ GetData.usr +"'";
+        ResultSet rs = LinkJavaMySql.selectQuery(query);
+        int actWaterTime = 0;
+        while(rs.next()){
+            int water = rs.getInt("Optimal_WaterTime");
+            actWaterTime = water;
+        }
+        rs.close();
+        
+        if(!Objects.equals(actWaterTime, expWaterTime)){
+            fail("The water time test has failed");
+        }
     }
     
+    /**
+     * Test of inputOptimalConditionWaterTimeInterval method, of class ControlPi.
+     * @throws java.lang.Exception
+     */
     @Test
     public void testInputOptimalConditionsOnWaterTimeInterval() {
-    
+        int timeInterval = 10;
+        ControlPi instance = new ControlPi();
+        instance.inputOptimalConditionWaterInterval(timeInterval);
+        
+        String query = "SELECT * FROM optimal_conditions WHERE Username = '"+ GetData.usr +"'";
+        ResultSet rs = LinkJavaMySql.selectQuery(query);
+        int actTimeInterval = 0;
+        while(rs.next()){
+            int interval = rs.getInt("Optimal_WaterTimeInterval");
+            actTimeInterval = interval;
+        }
+        rs.close();
+        
+        if(!Objects.equals(actTimeInterval, timeInterval)){
+            fail("The temp test has failed");
+        }
     }
     
     @Test
@@ -134,4 +195,18 @@ public class ControlPiTest {
     
     @Test
     public void testLoginPasswordInvalid() {}
+    
+    /**
+     * Test of getLoginInfo method, of class ControlPi.
+     */
+    @Test
+    public void testGetLoginInfo() {
+        GetData instance = new GetData();
+        String[] expResult = new String[2];
+        expResult[0] = "natalie";
+        expResult[1] = "password";
+        String[] result = instance.getLoginInfo();
+        assertEquals(expResult[0], result[0]);
+        assertEquals(expResult[1], result[1]);
+    }
 }
