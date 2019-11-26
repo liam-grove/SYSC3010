@@ -168,6 +168,82 @@ public class ControlPi {
             throw new Exception("Failed to insert into database. Try again");
         }
     }
+    
+        /**
+     * This method returns the last watering time(the time in which the water was turned off) 
+     * @return waterTime
+     */
+    public static Time getLastWaterTime(){
+        Time waterTime = null;
+        try{
+            String query = "SELECT Time_off FROM water_system WHERE Username = '"+ GetData.usr +"'";
+            ResultSet rs = LinkJavaMySql.selectQuery(query);
+            while(rs.next()){
+                waterTime = rs.getTime("Time_off");
+            }
+            rs.close();
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return waterTime;
+    }
+    
+    /**
+     * This method returns the current temperature of the greenhouse
+     * @return temp
+     */
+    public static float getCurrentTemp(){
+        float temp = 0;
+        try{
+            String query = "SELECT Temperature FROM collected_data WHERE Username = '"+ GetData.usr +"'";
+            ResultSet rs = LinkJavaMySql.selectQuery(query);
+            while(rs.next()){
+                temp = rs.getFloat("Temperature");
+            }
+            rs.close();
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return temp;
+    }
+    
+    /**
+     * This method returns the current humidity in the greenhouse
+     * @return 
+     */
+    public static float getCurrentHum(){
+        float hum = 0;
+        try{
+            String query = "SELECT Humidity FROM collected_data WHERE Username = '"+ GetData.usr +"'";
+            ResultSet rs = LinkJavaMySql.selectQuery(query);
+            while(rs.next()){
+                hum = rs.getFloat("Humidity");
+            }
+            rs.close();
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return hum;
+    }
+    
+    /**
+     * This returns how long the UVlight has been turned on 
+     * @return 
+     */
+    public static int getCurrentLightLevel(){
+        int light = 0;
+        try{
+            String query = "SELECT Hours_ON FROM lighting_system WHERE Username = '"+ usr +"'";
+            ResultSet rs = LinkJavaMySql.selectQuery(query);
+            while(rs.next()){
+                light = rs.getInt("Hours_ON");
+            }
+            rs.close();
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return light;
+    }
    
     /**
      * This method gets the last inputted entry that was put into the database
