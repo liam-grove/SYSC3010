@@ -16,6 +16,26 @@ package controlpi;
  */
 public class ControlPi {
    /**
+     * Gets the current data of the user and displays it.
+     *  
+     * @param table
+     * @return 
+     */
+    public static Object[] getCurrentData(String table){
+        Object data[] = GetData.getCurrentData(table);
+        return data;
+    }
+   
+   /**
+     * Gets the information required for the user's Login
+     * @return string[]
+     */
+    public static String[] getLoginInfo(){
+        String[] login = GetData.getLoginInfo();
+        return login;
+    }
+   
+   /**
      * This method inputs the optimal temperature into the database
      * @param optTemp 
      */
@@ -60,11 +80,7 @@ public class ControlPi {
         String query = "INSERT INTO optimal_conditions(Optimal_LightLevel); VALUES("+lightLevel+")";    
         byte[] request = GetData.sendMessageToServer(query);
     }
-    
-    public void Login(String username, String password){
-        
-    }
-    
+   
     /**
      * This method gets the last inputted entry that was put into the database
      * in the table collected_data
@@ -72,7 +88,7 @@ public class ControlPi {
      */
     public String getCurrentStats(){
         Object[] data = new Object[6];
-        data = GetData.getCurrentData();
+        data = GetData.getCurrentData("collected_data");
         return Arrays.deepToString(data);
     }
 }
