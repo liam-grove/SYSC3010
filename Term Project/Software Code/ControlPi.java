@@ -36,12 +36,37 @@ public class ControlPi {
     }
    
    /**
+     * 
+     * @param user
+     * @throws Exception 
+     */
+    public void insertUsername(String user) throws Exception{
+        user = GetData.usr;
+        String query = "INSERT INTO optimal_conditions (Username) VALUES ('"+ GetData.usr +"');";
+        boolean verified = LinkJavaMySql.insertQuery(query);
+        if (verified == true){
+            String message = "Sucessfully intserted into the database";
+            System.out.println(message);
+        }
+        else {
+            throw new Exception("Failed to insert into database. Try again");
+        }
+    }
+   
+   /**
      * This method inputs the optimal temperature into the database
      * @param optTemp 
      */
     public void inputOptimalCondidionTemp(Float optTemp){
-        String query = "INSERT INTO optimal_conditions(Optimal_Temperature); VALUES("+optTemp+")";
-        byte[] request = GetData.sendMessageToServer(query);
+        String query = "UPDATE optimal_conditions SET Optimal_Temperature = "+optTemp+" WHERE Username = '"+ GetData.usr +"'";
+        boolean verified = LinkJavaMySql.insertQuery(query);
+        if (verified == true){
+            String message = "Sucessfully intserted into the database";
+            System.out.println(message);
+        }
+        else {
+            throw new Exception("Failed to insert into database. Try again");
+        }
     }  
     
     /**
@@ -49,17 +74,32 @@ public class ControlPi {
      * @param optHumidity 
      */
     public void inputOptimalCondidionHumidity(Float optHumidity){
-        String query = "INSERT INTO optimal_conditions(Optimal_Humidity); VALUES("+optHumidity+")";
-        byte[] request = GetData.sendMessageToServer(query);
+        String query = "UPDATE optimal_conditions SET Optimal_Humidity = "+optHumidity+" WHERE Username = '"+ GetData.usr +"'";
+        boolean verified = LinkJavaMySql.insertQuery(query);
+        if (verified == true){
+            String message = "Sucessfully intserted into the database";
+            System.out.println(message);
+        }
+        else {
+            throw new Exception("Failed to insert into database. Try again");
+        }
     } 
     
     /**
      * This method inputs the optimal amount of time needed to water the plant into the database
      * @param waterTime 
      */
-    public void inputOptimalCondidionWaterTime(Float waterTime){
-        String query = "INSERT INTO optimal_conditions(Optimal_WaterTime); VALUES("+waterTime+")";
+    public void inputOptimalCondidionWaterTime(int waterTime){
+        String query = "UPDATE optimal_conditions SET Optimal_WaterTime ="+waterTime+" WHERE Username = '"+ GetData.usr +"'";
         byte[] request = GetData.sendMessageToServer(query);
+        boolean verified = LinkJavaMySql.insertQuery(query);
+        if (verified == true){
+            String message = "Sucessfully intserted into the database";
+            System.out.println(message);
+        }
+        else {
+            throw new Exception("Failed to insert into database. Try again");
+        }
     } 
     
     /**
@@ -67,9 +107,17 @@ public class ControlPi {
      * @param timeStart
      * @param timeEnd 
      */
-    public void inputOptimalConditionWaterInterval(Float timeStart, Float timeEnd){
-        String query = "INSERT INTO optimal_conditions(Optimal_WaterStart,Optimal_WaterEnd); VALUES("+timeStart+","+timeEnd+")";
+    public void inputOptimalConditionWaterInterval(int timeInterval){
+        String query = "UPDATE optimal_conditions SET Optimal_WaterTimeInterval = "+timeInterval+" WHERE Username = '"+ GetData.usr +"'";
         byte[] request = GetData.sendMessageToServer(query); //This will be sent through the client to the server
+        boolean verified = LinkJavaMySql.insertQuery(query);
+        if (verified == true){
+            String message = "Sucessfully intserted into the database";
+            System.out.println(message);
+        }
+        else {
+            throw new Exception("Failed to insert into database. Try again");
+        }
     }
     
     /**
@@ -77,8 +125,15 @@ public class ControlPi {
      * @param lightLevel 
      */
     public void inputOptimalConditonLightLevel(int lightLevel){
-        String query = "INSERT INTO optimal_conditions(Optimal_LightLevel); VALUES("+lightLevel+")";    
-        byte[] request = GetData.sendMessageToServer(query);
+        String query = "UPDATE optimal_conditions SET Optimal_LightLevel = "+lightLevel+" WHERE Username = '"+GetData.usr+"'";    
+        boolean verified = LinkJavaMySql.insertQuery(query);
+        if (verified == true){
+            String message = "Sucessfully intserted into the database";
+            System.out.println(message);
+        }
+        else {
+            throw new Exception("Failed to insert into database. Try again");
+        }
     }
    
     /**
