@@ -35,6 +35,10 @@ public class ControlPi {
         return login;
     }
     
+    /**
+     * This method gets the last 9 data inputs into the system
+     * @return 
+     */
     public static Object[][] getData(){
         Object[][] data = new Object[9][6];
         try{
