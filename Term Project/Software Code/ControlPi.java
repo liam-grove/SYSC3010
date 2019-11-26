@@ -42,7 +42,7 @@ public class ControlPi {
     public static Object[][] getData(){
         Object[][] data = new Object[9][6];
         try{
-            String query = "SELECT Username, Date, Time, Temperature, Humidity, LightLevel FROM collected_data WHERE Username = '"+ usr +"'";
+            String query = String query = "SELECT Username, Date, Time, Temperature, Humidity, LightLevel FROM collected_data WHERE Username = '"+ GetData.usr +"' ORDER BY id DESC LIMIT 10";
             ResultSet rs = LinkJavaMySql.selectQuery(query);
 
             int row = 0;
