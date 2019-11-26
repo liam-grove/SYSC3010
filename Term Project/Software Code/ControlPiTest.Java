@@ -48,20 +48,20 @@ public class ControlPiTest {
         //Expected last entry into the database 
         String name = "natalie";
         data[0] = name;
-
-        String date = "2019-10-11";
+        
+        String date = "2019-11-10";
         data[1] = date;
 
-        String time = "07:05:00";
+        String time = "18:05:00";
         data[2] = time;
-
-        Float temp = (float)43.0;
+        
+        Float temp = (float)36;
         data[3] = temp;
 
-        Float humid = (float)60.0;
+        Float humid = (float)54;
         data[4] = humid;
 
-        int light = 890;
+        int light = 800;
         data[5] = light;
 
         assertEquals(Arrays.deepToString(data), result);
