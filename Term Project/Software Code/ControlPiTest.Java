@@ -68,7 +68,7 @@ public class ControlPiTest {
     }
     
     @Test
-    public void testGetCurrentDataBad() {
+    public void testGetCurrentStatsBad() {
     
     }
     
