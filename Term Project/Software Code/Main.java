@@ -1,9 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gem;
+
+import java.awt.Color;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -44,9 +48,9 @@ public class Main extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         ChangeOptimalButton = new javax.swing.JButton();
         CreateReportButton = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         CurrentConditionsLabel.setFont(new java.awt.Font("Tempus Sans ITC", 1, 24)); // NOI18N
         CurrentConditionsLabel.setText("Current Conditons ");
@@ -57,7 +61,7 @@ public class Main extends javax.swing.JFrame {
 
         LightLabel.setText("Hours of Light: ");
 
-        WaterLabel.setText("Amount Watered (mL):");
+        WaterLabel.setText("Time Last Watered:");
 
         LiveFeedPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -75,15 +79,13 @@ public class Main extends javax.swing.JFrame {
         LiveFeedLabel.setFont(new java.awt.Font("Tempus Sans ITC", 1, 14)); // NOI18N
         LiveFeedLabel.setText("Live Feed");
 
-        CurrentTempLabel.setText(String.valueOf(ControlPi.getCurrentTemp()) + "°C");
+        CurrentTempLabel.setText("jLabel2");
 
-        CurrentHumidityLabel.setText(String.valueOf(ControlPi.getCurrentHum()));
+        CurrentHumidityLabel.setText("jLabel3");
 
-        CurrentLightLabel.setText(String.valueOf(ControlPi.getCurrentLightLevel()));
-        
-        DateFormat format = new SimpleDateFormat("HH:mm");
-        CurrentWaterLabel.setText(format.format(ControlPi.getLastWaterTime()));
+        CurrentLightLabel.setText("jLabel4");
 
+        CurrentWaterLabel.setText("jLabel5");
 
         javax.swing.GroupLayout PanelBLayout = new javax.swing.GroupLayout(PanelB);
         PanelB.setLayout(PanelBLayout);
@@ -157,25 +159,18 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("jButton1");
-
         javax.swing.GroupLayout PanelCLayout = new javax.swing.GroupLayout(PanelC);
         PanelC.setLayout(PanelCLayout);
         PanelCLayout.setHorizontalGroup(
             PanelCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelCLayout.createSequentialGroup()
-                .addGroup(PanelCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PanelCLayout.createSequentialGroup()
-                        .addGap(200, 200, 200)
-                        .addGroup(PanelCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(CreateReportButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(ChangeOptimalButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, PanelCLayout.createSequentialGroup()
-                                .addGap(24, 24, 24)
-                                .addComponent(jLabel1))))
-                    .addGroup(PanelCLayout.createSequentialGroup()
-                        .addGap(125, 125, 125)
-                        .addComponent(jButton1)))
+                .addGap(200, 200, 200)
+                .addGroup(PanelCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(CreateReportButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ChangeOptimalButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, PanelCLayout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(jLabel1)))
                 .addContainerGap(200, Short.MAX_VALUE))
         );
         PanelCLayout.setVerticalGroup(
@@ -187,8 +182,6 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(ChangeOptimalButton)
                 .addGap(28, 28, 28)
                 .addComponent(CreateReportButton)
-                .addGap(85, 85, 85)
-                .addComponent(jButton1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -220,15 +213,15 @@ public class Main extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>                        
-    
-    private void ChangeOptimalButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                   
-        // TODO add your handling code here:
-        
-    } 
-    
+
     private void CreateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                   
         // TODO add your handling code here:
     }                                                  
+
+    private void ChangeOptimalButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                    
+        dispose();
+        new OptimalConditions().setVisible(true);
+    }                                                   
 
     /**
      * @param args the command line arguments
@@ -264,6 +257,89 @@ public class Main extends javax.swing.JFrame {
             }
         });
     }
+    
+    public void updateCurrent(double t, double h, int l, int w) throws SQLException 
+    {
+        double idealTemp = 0.0;
+        double idealHumidity = 0.0;
+        int idealLight = 0;
+        int idealWater = 0;
+        
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/gem","root","Nirda21!ali");
+            Statement st = con.createStatement();
+            
+            ResultSet rs1 = st.executeQuery("SELECT temp FROM optimal");
+            while(rs1.next())
+            {
+                String idealTempStr = rs1.getString("temp");
+                idealTemp = Float.parseFloat(idealTempStr);
+            }
+            
+            ResultSet rs2 = st.executeQuery("SELECT humidity FROM optimal");
+            while(rs2.next())
+            {
+                String idealHumidityStr = rs1.getString("humidity");
+                idealHumidity = Float.parseFloat(idealHumidityStr);
+            }
+            
+            ResultSet rs3 = st.executeQuery("SELECT light FROM optimal");
+            while(rs3.next())
+            {
+                String idealLightStr = rs1.getString("light");
+                idealLight = Integer.parseInt(idealLightStr);
+            }
+            
+            ResultSet rs4 = st.executeQuery("SELECT water FROM optimal");
+            while(rs4.next())
+            {
+                String idealWaterStr = rs1.getString("water");
+                idealWater = Integer.parseInt(idealWaterStr);
+            }
+            
+            
+            if(t<idealTemp)
+            {
+                CurrentTempLabel.setText(String.valueOf(t));
+                CurrentTempLabel.setForeground(Color.green);
+            }else{
+                CurrentTempLabel.setText(String.valueOf(t));
+                CurrentTempLabel.setForeground(Color.red);
+            }
+            
+            if(h<idealHumidity)
+            {
+                CurrentHumidityLabel.setText(String.valueOf(h));
+                CurrentHumidityLabel.setForeground(Color.green);
+            }else{
+                CurrentHumidityLabel.setText(String.valueOf(h));
+                CurrentHumidityLabel.setForeground(Color.red);
+            }
+            
+            if(l<idealLight)
+            { 
+                CurrentLightLabel.setText(String.valueOf(l));
+                CurrentLightLabel.setForeground(Color.green);
+            }else{
+                CurrentLightLabel.setText(String.valueOf(l));
+                CurrentLightLabel.setForeground(Color.red);
+            }
+            
+            if(w<idealWater)
+            {
+                CurrentWaterLabel.setText(String.valueOf(w));  
+                CurrentWaterLabel.setForeground(Color.green);
+            }else{
+                CurrentTempLabel.setText(String.valueOf(t));
+                CurrentTempLabel.setForeground(Color.red);
+            }
+          
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
 
     // Variables declaration - do not modify                     
     private javax.swing.JButton ChangeOptimalButton;
@@ -282,7 +358,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel PanelC;
     private javax.swing.JLabel TempLabel;
     private javax.swing.JLabel WaterLabel;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration                   
 }
