@@ -72,7 +72,15 @@ public class ControlPiTest {
     
     @Test
     public void testGetCurrentStatsBad() {
-    
+        ControlPi instance = new ControlPi();
+        Object[] data = new Object[2];
+        
+        Float humidity = (float)60;
+        data[0] = humidity;
+        
+        String result = instance.getCurrentStats();
+        
+        assertEquals(result, Arrays.deepToString(data));
     }
     
     /**
