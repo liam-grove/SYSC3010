@@ -34,6 +34,9 @@ public class ControlPiTest {
         Object[][] data;
         data = instance.getData();
         System.out.println(Arrays.deepToString(data));
+        if(data.length != 10){
+            fail();
+        }
     }
     
     /**
@@ -185,16 +188,39 @@ public class ControlPiTest {
     }
     
     @Test
-    public void testLoginUsernameValid() {}
+    public void testLoginUsernameValid() {
+        GetData instance = new GetData();
+        String[] expResult = new String[2];
+        expResult[0] = "natalie";
+        expResult[1] = "password";
+        String[] result = instance.getLoginInfo();
+        assertEquals(expResult[0], result[0]);
+        assertEquals(expResult[1], result[1]);
+    }
     
     @Test
-    public void testLoginUsernameInvalid() {}
+    public void testLoginUsernameInvalid() {
+       GetData instance = new GetData();
+        String[] expResult = new String[2];
+        expResult[0] = "natali";
+        expResult[1] = "password";
+        String[] result = instance.getLoginInfo();
+        if(expResult != result){
+            fail();
+        }
+    }
     
     @Test
-    public void testLoginPasswordValid() {}
-    
-    @Test
-    public void testLoginPasswordInvalid() {}
+    public void testLoginPasswordInvalid() {
+        GetData instance = new GetData();
+        String[] expResult = new String[2];
+        expResult[0] = "natalie";
+        expResult[1] = "passwo";
+        String[] result = instance.getLoginInfo();
+        if(expResult != result){
+            fail();
+        }
+    }
     
     /**
      * Test of getLoginInfo method, of class ControlPi.
