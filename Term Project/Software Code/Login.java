@@ -1,14 +1,15 @@
+package gem;
 
-package controlpi;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import java.lang.Character;
+
 /**
  *
  * @author Nirda
@@ -72,11 +73,7 @@ public class Login extends javax.swing.JFrame {
         LoginButton.setText("Log In ");
         LoginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    LoginButtonActionPerformed(evt);
-                } catch (ClassNotFoundException ex) {
-                    System.out.println(ex);
-                }
+                LoginButtonActionPerformed(evt);
             }
         });
 
@@ -153,42 +150,42 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
     }                                                 
 
-    private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) throws ClassNotFoundException {                                            
+    private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {                                            
         
         //Get user entered data from username and password fields 
         String username = UsernameTextField.getText();
         char[] pass = PasswordField.getPassword();
         String password = new String(pass);
+        boolean found = false;
         
-        String[] data = new String[2]; //created an array to store the login information in to verify login
         try {
-            String query = "SELECT Username,Password FROM login_information WHERE Username = '" + username + "' AND Password = '" + password + "'";
-            ResultSet rs = LinkJavaMySql.selectQuery(query);
-
-            while(rs.next()){
-                String user = rs.getString("Username");
-                String passWord = rs.getString("Password");
-                data[0] = user;
-                data[1] = passWord;
-            }
             
-            if(data[0] != null)
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/gem","root","Nirda21!ali");
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT username,password FROM login WHERE username = \"" + username + "\" AND password = \"" + password + "\"");
+            if(rs.next())
             {
-            //open new window 
                 dispose();
                 new Main().setVisible(true);
             }
             else 
-            {//username and password not found 
-            JOptionPane.showMessageDialog(null,"Invalid Login Details", "Login Error", JOptionPane.ERROR_MESSAGE);
-            UsernameTextField.setText(null);
-            PasswordField.setText(null);
+            {
+                JOptionPane.showMessageDialog(null,"Invalid Login Details", "Login Error", JOptionPane.ERROR_MESSAGE);
+                UsernameTextField.setText(null);
+                PasswordField.setText(null);
             
-            }
+            }  
+            
             rs.close();
-        } catch (SQLException ex) {
-            System.out.println(ex);
+            con.close();
+                        
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+
+        
     }                                           
 
     private void PasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {                                              
@@ -230,16 +227,7 @@ public class Login extends javax.swing.JFrame {
         });
     }
     
-    public int checkUsername(String U)
-    {
-        //send 
-        return 0;
-    }
-    
-    public boolean checkPassword(int r, String P)
-    {
-        return false; 
-    }
+   
 
     // Variables declaration - do not modify                     
     private javax.swing.JButton LoginButton;
