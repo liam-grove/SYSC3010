@@ -1,18 +1,26 @@
+#include <Arduino.h>
+
 #include <dht.h>
 #include <Stepper.h>
-#include <Scheduler.h>
 
 dht DHT;
 #define DHT11_PIN 7
 
 int photocellPin = 0;                // the cell and 10K pulldown are connected to a0
+int LEDpin = 5;                      // connect Red LED to pin 5 (PWM pin)
 
 int light;                           // the analog readings from the sensors
 float temperature;
 float humidity;
 
+long intervalSensors = 10000;
+long intervalMotor = 15000;
+long intervalLight = 5000;
+unsigned long previousMillisSensors = 0;
+unsigned long previousMillisMotor = 0;
+unsigned long previousMillisLight = 0;
+
 int invertedLight;                 // analog reading inverted to be used as output
-int LEDpin = 5;                      // connect Red LED to pin 5 (PWM pin)
 int LEDbrightness;                   // intensity of LED output
 const int stepsPerRevolution = 2048; // number of steps per rotation for motor:
 
@@ -21,35 +29,49 @@ Stepper myStepper = Stepper(stepsPerRevolution, 8, 10, 9, 11);  // Create steppe
 String data; //data string containing sensor values to be sent via Serial
 
 void setup(void) {
-  myStepper.setSpeed(10); // Set the motor speed to 10 rpm
+  myStepper.setSpeed(15); // Set the motor speed to 15 rpm
   Serial.begin(9600); //initialize serial monitor
-  Scheduler.startLoop(loop2); //schedule second function
-  Scheduler.startLoop(loop3); //schedule third function
 }
 
 //main sensor reading function
 void loop(void) {
-  light = analogRead(photocellPin);
-  int chk = DHT.read11(DHT11_PIN);
-  temperature = DHT.temperature;
-  humidity = DHT.humidity;
-  data = String("<" + light + "," + temperature + "," + humidity + ">");
-  Serial.println(data);
-  delay(10000);
-}
-
-//lighting adjustment function
-void loop2(void) {
-  if (light < 800){
-    invertedLight = 1023 - light;   
-    LEDbrightness = map(invertedLight, 0, 1023, 0, 255);  
-    analogWrite(LEDpin, LEDbrightness);
+  
+  unsigned long currentMillis = millis();
+  if(currentMillis - previousMillisSensors >= intervalSensors){
+    light = analogRead(photocellPin);
+    int chk = DHT.read11(DHT11_PIN);
+    temperature = DHT.temperature;
+    humidity = DHT.humidity;
+    //Serial.println(light);
+    String lightString = String(light, DEC);
+    String tempString = String(temperature, 3);
+    String humString = String(humidity, 3);
+    String data = String('<');
+    data.concat(lightString);
+    data.concat(',');
+    data.concat(tempString);
+    data.concat(',');
+    data.concat(humString);
+    data.concat('>');
+    Serial.println(data);
+    previousMillisSensors = currentMillis;
   }
-  yield();
-}
 
-//motor activation function
-void loop3(void) {
+  //Lighting adjustment
+  if(currentMillis - previousMillisLight >= intervalLight){
+    if (light < 750){
+      invertedLight = 1023 - light;   
+      LEDbrightness = map(invertedLight, 0, 1023, 0, 255);  
+      analogWrite(LEDpin, LEDbrightness);
+    }
+    else{
+      analogWrite(LEDpin, 0);
+    }
+    //Serial.println("Adjusting light...");
+    previousMillisLight = currentMillis;
+  }
+  
+  //Motor adjustment based on Serial input
   if (Serial.available()) {
     char c = Serial.read();
     if (c=='1'){
@@ -58,6 +80,6 @@ void loop3(void) {
     if (c=='0'){
       myStepper.step(-stepsPerRevolution);
     }
+    //Serial.println("Motor active...");
   }
-  yield();
 }
