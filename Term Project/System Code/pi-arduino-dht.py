@@ -8,7 +8,7 @@ serverPort = 9876
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 clientport = 56789
-serverAddress = (serverHost, port)
+serverAddress = (serverIP, port)
 arduino = serial.Serial('/dev/ttyUSB0', 9600)
 sock.bind(serverAddress)
 
