@@ -1,4 +1,11 @@
-public class UDPServer {
+import java.io.IOException;
+import java.net.*;
+
+/**
+ *
+ * @author Nirda
+ */
+public class Server {
     
    private static InetAddress DataPiAddress;
    private static int DataPiPort;
@@ -6,7 +13,7 @@ public class UDPServer {
    private static int ControlPiPort;
    private static InetAddress AppAddress;
    private static int AppPort;
-   private static int Port = 9876;
+   private static int Port = 56789;
    //private LinkJavaMySQL link;
    
    public static void main(String args[]) throws IOException, ClassNotFoundException
@@ -25,7 +32,7 @@ public class UDPServer {
                  serverSocket.receive(receivePacket);
                  System.out.println("Packet received...");
                  String message = new String( receivePacket.getData());
-                 
+                 System.out.println(message);
                  /**messages sent to server have format "source:destination:opcode:data"
                  where source and destination are a 3-char name (dpi, cpi, app), opcode is a 4-byte code
                  representing a specific function, and data is the remaining 40 bytes making up the core
@@ -71,9 +78,9 @@ public class UDPServer {
                  
                  //other code
                  else {
-                     
+                     System.out.println("Forwarding message...");
                      //return message contents to bytearray format
-                     sendData = code.getBytes();
+                     sendData = message.getBytes();
                   
                      //determine destination node and send packet
                      switch (destination) {
@@ -85,8 +92,11 @@ public class UDPServer {
                              }
                          case "cpi":
                              {
+                                 System.out.println("Send to CPi");
                                  DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ControlPiAddress, ControlPiPort);
+                                 System.out.println("Packet created!");
                                  serverSocket.send(sendPacket);
+                                 System.out.println("Sent");
                                  break;
                              }
                          case "app":
@@ -99,18 +109,12 @@ public class UDPServer {
                              System.out.println("Error: incompatible destination address.");
                              continue;
                      }
-                  
-                     
-                     
+  
                  }
                   //send confirmation acknowledgement to source node
-                     DatagramPacket acknowledgement = new DatagramPacket(ack, ack.length, receivePacket.getAddress(), receivePacket.getPort());
+                    /** DatagramPacket acknowledgement = new DatagramPacket(ack, ack.length, receivePacket.getAddress(), receivePacket.getPort());
                      serverSocket.send(acknowledgement);
-                     System.out.println("Ack sent...");
+                     System.out.println("Ack sent...");**/
              }
    }
-    
-   
-   
 }
-
