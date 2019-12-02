@@ -1,13 +1,3 @@
-package gem;
-
-import java.io.IOException;
-import java.net.*;
-import java.sql.ResultSet;
-
-/**
- *
- * @author Nirda
- */
 public class UDPServer {
     
    private static InetAddress DataPiAddress;
@@ -17,7 +7,7 @@ public class UDPServer {
    private static InetAddress AppAddress;
    private static int AppPort;
    private static int Port = 9876;
-   private LinkJavaMySQL link;
+   //private LinkJavaMySQL link;
    
    public static void main(String args[]) throws IOException, ClassNotFoundException
    {
@@ -25,14 +15,15 @@ public class UDPServer {
             DatagramSocket serverSocket = new DatagramSocket(Port);
             byte[] receiveData = new byte[56];
             byte[] sendData = new byte[50];
-            byte[] ack = {'A', 'C', 'K'};
+            byte[] ack = {'1',':','2',':','A', 'C', 'K',':','3'};
             
             while(true){
                  
                  //create and receive incoming packet
                  DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-                 System.out.println("yay");
+                 System.out.println("Running...");
                  serverSocket.receive(receivePacket);
+                 System.out.println("Packet received...");
                  String message = new String( receivePacket.getData());
                  
                  /**messages sent to server have format "source:destination:opcode:data"
@@ -57,6 +48,7 @@ public class UDPServer {
                  //check if incoming packet is initial connection
                  else if (code.equals("BOOT")){
                      
+                     System.out.println("Boot received...");
                      //assign received packet data to source node
                      switch (source) {
                          case "dpi": //if source is data pi, assign origin address to data pi
@@ -76,19 +68,7 @@ public class UDPServer {
                      }
                      
                  }
-                 //code is to insert data to database
-                 else if (code.equals("DB01")){
-                     
-                     LinkJavaMySQL.insertQuery(data);
-                     
-                 }
-                 //code is to select data from database
-                 else if (code.equals("DB02")){
-                     
-                    ResultSet result = LinkJavaMySQL.selectQuery(data);
-                    
-                     
-                 }
+                 
                  //other code
                  else {
                      
@@ -120,15 +100,17 @@ public class UDPServer {
                              continue;
                      }
                   
-                     //send confirmation acknowledgement to source node
-                     DatagramPacket acknowledgement = new DatagramPacket(ack, ack.length, receivePacket.getAddress(), receivePacket.getPort());
-                     serverSocket.send(acknowledgement);
+                     
                      
                  }
-                  
+                  //send confirmation acknowledgement to source node
+                     DatagramPacket acknowledgement = new DatagramPacket(ack, ack.length, receivePacket.getAddress(), receivePacket.getPort());
+                     serverSocket.send(acknowledgement);
+                     System.out.println("Ack sent...");
              }
    }
     
    
    
 }
+
