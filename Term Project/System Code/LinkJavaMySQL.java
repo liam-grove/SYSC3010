@@ -1,5 +1,7 @@
+
 package gem;
 
+import com.mysql.jdbc.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -11,8 +13,8 @@ public class LinkJavaMySQL {
     
     //JDBC URL, username and password of MySQL server
     private static final String driver = "com.mysql.jdbc.Driver";
-    private static final String url = ""jdbc:mysql://localhost:3306/greenhouse"";
-    private static final String user = "natalie";
+    private static final String url = "jdbc:mysql://172.17.55.14:3306/greenhouse";
+    private static final String user = "nirda";
     private static final String password = "password";
     
     //JDBC variables for opening and managing connection
@@ -25,9 +27,9 @@ public class LinkJavaMySQL {
         
     }
     
-    public ResultSet selectQuery(String query) {
+    public static ResultSet selectQuery(String query) throws ClassNotFoundException {
         
-        try {
+       try {
             Class.forName(driver);
             //open database connection
             con = DriverManager.getConnection(url, user, password);
@@ -49,7 +51,7 @@ public class LinkJavaMySQL {
         return rs;
     }
     
-    public boolean insertQuery(String query) {
+    public static boolean insertQuery(String query) throws ClassNotFoundException {
         
         boolean result = true;
         
