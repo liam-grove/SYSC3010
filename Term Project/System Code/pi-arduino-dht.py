@@ -26,8 +26,8 @@ serverAddress = (serverIP, serverPort)
 arduino = serial.Serial('/dev/ttyACM1', 9600)
 #sock.bind((serverIP, serverPort))
 
-wateringActive = 5 #time between turning water on/off
-wateringInterval = 8 #time between watering cycles
+wateringActive = 10 #time between turning water on/off
+wateringInterval = 25 #time between watering cycles
 
 bootMessage = "dpi:ser:BOOT:test"
 sock.sendto(bootMessage.encode('utf-8'), (serverIP, serverPort))
@@ -65,19 +65,34 @@ def receive_data():
     print("Data received:")
     print(data)
     
-    splitData = data.split(':')
+    data2 = data.decode()
+    print("Decoded: ")
+    print(data2)
+    
+    splitData = data2.split(':')
+    print("Data: ")
+    print(splitData[3])
     code = splitData[2]
-    if code == WATER1:
+    if code == "WATER1":
         wateringInterval = splitData[3]
-    if code == WATER2:
+        print("Watering interval set to: ")
+        print(splitData[3])
+    if code == "WATER2":
         wateringActive = splitData[3]
+        print("Watering delay set to: ")
+        print(splitData[3])
         
 @tl.job(interval=timedelta(seconds=wateringInterval))
 def activate_water():
     
+    activate = "1"
+    deactivate = "0"
+    
     print("Activating motor")
-    arduino.write(1)
-    print(wateringActive)
+    arduino.write(activate.encode('utf-8'))
+    time.sleep(wateringActive)
+    print("Deactivating motor")
+    arduino.write(deactivate.encode('utf-8'))
     
 if __name__ == "__main__":
     tl.start(block=True)
