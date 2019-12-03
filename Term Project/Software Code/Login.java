@@ -1,5 +1,6 @@
 package gem;
 
+import java.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -41,6 +42,7 @@ public class Login extends javax.swing.JFrame {
         UsernameTextField = new javax.swing.JTextField();
         LoginButton = new javax.swing.JButton();
         PasswordField = new javax.swing.JPasswordField();
+        createaccountButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -83,6 +85,13 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
+        createaccountButton.setText("Create Account");
+        createaccountButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createaccountButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout PanelCLayout = new javax.swing.GroupLayout(PanelC);
         PanelC.setLayout(PanelCLayout);
         PanelCLayout.setHorizontalGroup(
@@ -97,8 +106,11 @@ public class Login extends javax.swing.JFrame {
                             .addComponent(UsernameTextField)
                             .addComponent(PasswordField, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)))
                     .addGroup(PanelCLayout.createSequentialGroup()
-                        .addGap(99, 99, 99)
-                        .addComponent(LoginButton)))
+                        .addGap(94, 94, 94)
+                        .addComponent(LoginButton))
+                    .addGroup(PanelCLayout.createSequentialGroup()
+                        .addGap(76, 76, 76)
+                        .addComponent(createaccountButton)))
                 .addContainerGap(56, Short.MAX_VALUE))
         );
         PanelCLayout.setVerticalGroup(
@@ -112,9 +124,11 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(Password)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(PasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
+                .addGap(18, 18, 18)
                 .addComponent(LoginButton)
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(createaccountButton)
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout PanelALayout = new javax.swing.GroupLayout(PanelA);
@@ -159,15 +173,15 @@ public class Login extends javax.swing.JFrame {
         boolean found = false;
         
         try {
-            
+            String url = "jdbc:mysql://172.20.10.3:3306/greenhouse";
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/gem","root","Nirda21!ali");
+            Connection con = DriverManager.getConnection(url,"nirda","password");
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT username,password FROM login WHERE username = \"" + username + "\" AND password = \"" + password + "\"");
+            ResultSet rs = st.executeQuery("SELECT Username,Password FROM login_information WHERE Username = \"" + username + "\" AND Password = \"" + password + "\"");
             if(rs.next())
             {
                 dispose();
-                new Main().setVisible(true);
+                new MainWindow().setVisible(true);
             }
             else 
             {
@@ -191,6 +205,11 @@ public class Login extends javax.swing.JFrame {
     private void PasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // TODO add your handling code here:
     }                                             
+
+    private void createaccountButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                    
+        dispose();
+        new CreateAccount().setVisible(true);
+    }                                                   
 
     /**
      * @param args the command line arguments
@@ -238,5 +257,6 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPasswordField PasswordField;
     private javax.swing.JLabel Username;
     private javax.swing.JTextField UsernameTextField;
+    private javax.swing.JButton createaccountButton;
     // End of variables declaration                   
 }
