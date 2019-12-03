@@ -13,13 +13,28 @@ import java.util.logging.Logger;
  *
  * @author Nirda
  */
-public class Main extends javax.swing.JFrame {
+public class MainWindow extends javax.swing.JFrame {
+    
+    public  float temp ;
+    public  float hum ; 
+    public  int light ;
 
     /**
      * Creates new form Main
      */
-    public Main() {
+    public MainWindow() {
         initComponents();
+        Thread object = new Thread(new UDPClient());
+        object.start();
+    }
+    public MainWindow(float t,float h, int l) throws SQLException {
+        initComponents();
+        temp = t;
+        hum = h;
+        light = l; 
+        updateCurrent();
+        Thread object = new Thread(new UDPClient());
+        object.start();
     }
 
     /**
@@ -38,19 +53,20 @@ public class Main extends javax.swing.JFrame {
         HumidityLabel = new javax.swing.JLabel();
         LightLabel = new javax.swing.JLabel();
         WaterLabel = new javax.swing.JLabel();
-        LiveFeedPanel = new javax.swing.JPanel();
-        LiveFeedLabel = new javax.swing.JLabel();
         CurrentTempLabel = new javax.swing.JLabel();
         CurrentHumidityLabel = new javax.swing.JLabel();
         CurrentLightLabel = new javax.swing.JLabel();
         CurrentWaterLabel = new javax.swing.JLabel();
+        CreateReportButton = new javax.swing.JButton();
         PanelC = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         ChangeOptimalButton = new javax.swing.JButton();
-        CreateReportButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+
+        PanelB.setBackground(new java.awt.Color(0, 102, 204));
+        PanelB.setForeground(new java.awt.Color(0, 102, 255));
 
         CurrentConditionsLabel.setFont(new java.awt.Font("Tempus Sans ITC", 1, 24)); // NOI18N
         CurrentConditionsLabel.setText("Current Conditons ");
@@ -63,22 +79,6 @@ public class Main extends javax.swing.JFrame {
 
         WaterLabel.setText("Time Last Watered:");
 
-        LiveFeedPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        javax.swing.GroupLayout LiveFeedPanelLayout = new javax.swing.GroupLayout(LiveFeedPanel);
-        LiveFeedPanel.setLayout(LiveFeedPanelLayout);
-        LiveFeedPanelLayout.setHorizontalGroup(
-            LiveFeedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        LiveFeedPanelLayout.setVerticalGroup(
-            LiveFeedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 239, Short.MAX_VALUE)
-        );
-
-        LiveFeedLabel.setFont(new java.awt.Font("Tempus Sans ITC", 1, 14)); // NOI18N
-        LiveFeedLabel.setText("Live Feed");
-
         CurrentTempLabel.setText("jLabel2");
 
         CurrentHumidityLabel.setText("jLabel3");
@@ -87,11 +87,17 @@ public class Main extends javax.swing.JFrame {
 
         CurrentWaterLabel.setText("jLabel5");
 
+        CreateReportButton.setText("Create Report");
+        CreateReportButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CreateReportButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout PanelBLayout = new javax.swing.GroupLayout(PanelB);
         PanelB.setLayout(PanelBLayout);
         PanelBLayout.setHorizontalGroup(
             PanelBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(LiveFeedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(PanelBLayout.createSequentialGroup()
                 .addGroup(PanelBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelBLayout.createSequentialGroup()
@@ -111,8 +117,8 @@ public class Main extends javax.swing.JFrame {
                             .addComponent(CurrentLightLabel)
                             .addComponent(CurrentWaterLabel)))
                     .addGroup(PanelBLayout.createSequentialGroup()
-                        .addGap(119, 119, 119)
-                        .addComponent(LiveFeedLabel)))
+                        .addGap(80, 80, 80)
+                        .addComponent(CreateReportButton, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(53, Short.MAX_VALUE))
         );
         PanelBLayout.setVerticalGroup(
@@ -136,10 +142,9 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(PanelBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(WaterLabel)
                     .addComponent(CurrentWaterLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                .addComponent(LiveFeedLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(LiveFeedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(95, 95, 95)
+                .addComponent(CreateReportButton)
+                .addContainerGap(80, Short.MAX_VALUE))
         );
 
         jLabel1.setFont(new java.awt.Font("Tempus Sans ITC", 1, 24)); // NOI18N
@@ -152,36 +157,26 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        CreateReportButton.setText("Create Report");
-        CreateReportButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CreateReportButtonActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout PanelCLayout = new javax.swing.GroupLayout(PanelC);
         PanelC.setLayout(PanelCLayout);
         PanelCLayout.setHorizontalGroup(
             PanelCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelCLayout.createSequentialGroup()
-                .addGap(200, 200, 200)
-                .addGroup(PanelCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(CreateReportButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ChangeOptimalButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, PanelCLayout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(jLabel1)))
-                .addContainerGap(200, Short.MAX_VALUE))
+                .addGap(102, 102, 102)
+                .addComponent(ChangeOptimalButton)
+                .addContainerGap(53, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelCLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(96, 96, 96))
         );
         PanelCLayout.setVerticalGroup(
             PanelCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelCLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(57, 57, 57)
+                .addGap(66, 66, 66)
                 .addComponent(ChangeOptimalButton)
-                .addGap(28, 28, 28)
-                .addComponent(CreateReportButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -220,7 +215,13 @@ public class Main extends javax.swing.JFrame {
 
     private void ChangeOptimalButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                    
         dispose();
-        new OptimalConditions().setVisible(true);
+        try {
+            new OptimalConditions().setVisible(true);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }                                                   
 
     /**
@@ -240,103 +241,101 @@ public class Main extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Main().setVisible(true);
+                MainWindow m = new MainWindow();
+                m.setVisible(true);
+                try {
+                    m.updateCurrent();
+                } catch (SQLException ex) {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                //new MainWindow().setVisible(true);
+
             }
         });
     }
-    
-    public void updateCurrent(double t, double h, int l, int w) throws SQLException 
+   
+    public void updateLabels(float t, float h, int l)
     {
-        double idealTemp = 0.0;
-        double idealHumidity = 0.0;
-        int idealLight = 0;
-        int idealWater = 0;
+        temp = t;
+        hum = h;
+        light = l; 
         
+    }
+    
+    
+    public void updateCurrent() throws SQLException 
+    {
+        float idealTemp = 0;
+        float idealHumidity = 0;
+        int idealLight = 0;
+
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/gem","root","Nirda21!ali");
-            Statement st = con.createStatement();
-            
-            ResultSet rs1 = st.executeQuery("SELECT temp FROM optimal");
+
+            String query1 = "SELECT Optimal_Temperature FROM optimal_conditions";
+            ResultSet rs1 = LinkJavaMySQL.selectQuery(query1);
             while(rs1.next())
             {
-                String idealTempStr = rs1.getString("temp");
-                idealTemp = Float.parseFloat(idealTempStr);
+                idealTemp = rs1.getFloat("Optimal_Temperature");
             }
             
-            ResultSet rs2 = st.executeQuery("SELECT humidity FROM optimal");
+            String query2 = "SELECT Optimal_Humidity FROM optimal_conditions";
+            ResultSet rs2 = LinkJavaMySQL.selectQuery(query2);
             while(rs2.next())
             {
-                String idealHumidityStr = rs1.getString("humidity");
-                idealHumidity = Float.parseFloat(idealHumidityStr);
+                idealHumidity = rs2.getFloat("Optimal_Humidity");
             }
             
-            ResultSet rs3 = st.executeQuery("SELECT light FROM optimal");
+            String query3 = "SELECT light FROM optimal_conditions";
+            ResultSet rs3 = LinkJavaMySQL.selectQuery(query3);
             while(rs3.next())
             {
-                String idealLightStr = rs1.getString("light");
-                idealLight = Integer.parseInt(idealLightStr);
+                idealLight = rs3.getInt("light");               
             }
             
-            ResultSet rs4 = st.executeQuery("SELECT water FROM optimal");
-            while(rs4.next())
+
+            if(temp<idealTemp)
             {
-                String idealWaterStr = rs1.getString("water");
-                idealWater = Integer.parseInt(idealWaterStr);
-            }
-            
-            
-            if(t<idealTemp)
-            {
-                CurrentTempLabel.setText(String.valueOf(t));
+                CurrentTempLabel.setText(String.valueOf(temp));
                 CurrentTempLabel.setForeground(Color.green);
             }else{
-                CurrentTempLabel.setText(String.valueOf(t));
+                CurrentTempLabel.setText(String.valueOf(6));
                 CurrentTempLabel.setForeground(Color.red);
             }
             
-            if(h<idealHumidity)
+            if(hum<idealHumidity)
             {
-                CurrentHumidityLabel.setText(String.valueOf(h));
+                CurrentHumidityLabel.setText(String.valueOf(hum));
                 CurrentHumidityLabel.setForeground(Color.green);
             }else{
-                CurrentHumidityLabel.setText(String.valueOf(h));
+                CurrentHumidityLabel.setText(String.valueOf(7));
                 CurrentHumidityLabel.setForeground(Color.red);
             }
             
-            if(l<idealLight)
+            if(light<idealLight)
             { 
-                CurrentLightLabel.setText(String.valueOf(l));
+                CurrentLightLabel.setText(String.valueOf(light));
                 CurrentLightLabel.setForeground(Color.green);
             }else{
-                CurrentLightLabel.setText(String.valueOf(l));
+                CurrentLightLabel.setText(String.valueOf(3));
                 CurrentLightLabel.setForeground(Color.red);
             }
-            
-            if(w<idealWater)
-            {
-                CurrentWaterLabel.setText(String.valueOf(w));  
-                CurrentWaterLabel.setForeground(Color.green);
-            }else{
-                CurrentTempLabel.setText(String.valueOf(t));
-                CurrentTempLabel.setForeground(Color.red);
-            }
-          
+
         } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -351,8 +350,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel CurrentWaterLabel;
     private javax.swing.JLabel HumidityLabel;
     private javax.swing.JLabel LightLabel;
-    private javax.swing.JLabel LiveFeedLabel;
-    private javax.swing.JPanel LiveFeedPanel;
     private javax.swing.JPanel PanelA;
     private javax.swing.JPanel PanelB;
     private javax.swing.JPanel PanelC;
@@ -360,4 +357,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel WaterLabel;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration                   
+
+   
+
 }
