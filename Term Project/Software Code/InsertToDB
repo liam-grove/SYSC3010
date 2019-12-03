@@ -33,7 +33,8 @@ public class InsertToDB {
         try {
             String query = "INSERT INTO optimal_conditions(Optimal_Humidity) WHERE Username ='"+ username +"; VALUES("+optHumidity+")";
             boolean request = LinkJavaMySQL.insertQuery(query);
-        } catch (ClassNotFoundException ex) {
+        } 
+        catch (ClassNotFoundException ex) {
             System.out.println("Exception: " + ex);
         }
     } 
@@ -46,7 +47,8 @@ public class InsertToDB {
         try {
             String query = "INSERT INTO optimal_conditions(Optimal_LightLevel) WHERE Username ='"+ username +"; VALUES("+lightLevel+")";
             boolean request = LinkJavaMySQL.insertQuery(query);
-        } catch (ClassNotFoundException ex) {
+        } 
+        catch (ClassNotFoundException ex) {
             System.out.println("Exception: " + ex);
         }
     }
