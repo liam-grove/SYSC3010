@@ -23,7 +23,7 @@ public final class OptimalConditions extends javax.swing.JFrame {
     /**
      * Creates new form OptimalConditions
      */
-    public OptimalConditions() {
+    public OptimalConditions() throws ClassNotFoundException, SQLException {
         initComponents();
         updateLabels();
         
@@ -44,20 +44,24 @@ public final class OptimalConditions extends javax.swing.JFrame {
         tempLabel = new javax.swing.JLabel();
         humidityLabel = new javax.swing.JLabel();
         lightLabel = new javax.swing.JLabel();
-        waterLabel = new javax.swing.JLabel();
+        watertimeLabel = new javax.swing.JLabel();
         optimalTemp = new javax.swing.JLabel();
         optimalHumidity = new javax.swing.JLabel();
         optimalLight = new javax.swing.JLabel();
-        optimalWater = new javax.swing.JLabel();
         tempField = new javax.swing.JTextField();
         humidityField = new javax.swing.JTextField();
         lightField = new javax.swing.JTextField();
-        waterField = new javax.swing.JTextField();
+        watertimeField = new javax.swing.JTextField();
         tempButton = new javax.swing.JButton();
         humidityButton = new javax.swing.JButton();
         lightButton = new javax.swing.JButton();
         waterButton = new javax.swing.JButton();
         backButton = new javax.swing.JButton();
+        watertimeintervalLabel = new javax.swing.JLabel();
+        watertimeintervalField = new javax.swing.JTextField();
+        watertimeintervalButton = new javax.swing.JButton();
+        optimalWatertime = new javax.swing.JLabel();
+        optimalWaterTimeInterval = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,7 +74,7 @@ public final class OptimalConditions extends javax.swing.JFrame {
 
         lightLabel.setText("Hours of Light: ");
 
-        waterLabel.setText("Amount Watered (mL):");
+        watertimeLabel.setText("Water Time (seconds):");
 
         tempField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -125,6 +129,16 @@ public final class OptimalConditions extends javax.swing.JFrame {
             }
         });
 
+        watertimeintervalLabel.setText("Watering Interval (minutes):");
+
+        watertimeintervalField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                watertimeintervalFieldActionPerformed(evt);
+            }
+        });
+
+        watertimeintervalButton.setText("Change");
+
         javax.swing.GroupLayout PanelALayout = new javax.swing.GroupLayout(PanelA);
         PanelA.setLayout(PanelALayout);
         PanelALayout.setHorizontalGroup(
@@ -132,41 +146,48 @@ public final class OptimalConditions extends javax.swing.JFrame {
             .addGroup(PanelALayout.createSequentialGroup()
                 .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelALayout.createSequentialGroup()
+                        .addGap(278, 278, 278)
+                        .addComponent(optimalConditionsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(PanelALayout.createSequentialGroup()
                         .addGap(69, 69, 69)
                         .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(waterLabel)
+                            .addComponent(watertimeLabel)
                             .addComponent(humidityLabel)
                             .addComponent(tempLabel)
-                            .addComponent(lightLabel))
-                        .addGap(36, 36, 36)
-                        .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lightField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(humidityField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelALayout.createSequentialGroup()
-                                .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(optimalWater, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(PanelALayout.createSequentialGroup()
+                            .addComponent(lightLabel)
+                            .addComponent(watertimeintervalLabel))
+                        .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(PanelALayout.createSequentialGroup()
+                                .addGap(36, 36, 36)
+                                .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lightField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(humidityField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelALayout.createSequentialGroup()
                                         .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(optimalHumidity)
-                                            .addComponent(optimalTemp))
-                                        .addGap(57, 57, 57))
-                                    .addComponent(optimalLight, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(21, 21, 21)
-                                .addComponent(tempField, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(waterField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(160, 160, 160)
+                                            .addComponent(optimalTemp)
+                                            .addComponent(optimalLight, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(optimalWaterTimeInterval, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(53, 53, 53)
+                                        .addComponent(tempField, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelALayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(optimalWatertime, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(watertimeintervalField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(watertimeField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(164, 164, 164)
                         .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(tempButton)
                             .addComponent(humidityButton)
                             .addComponent(lightButton)
-                            .addComponent(waterButton)))
+                            .addComponent(waterButton)
+                            .addComponent(watertimeintervalButton, javax.swing.GroupLayout.Alignment.LEADING)))
                     .addGroup(PanelALayout.createSequentialGroup()
-                        .addGap(278, 278, 278)
-                        .addComponent(optimalConditionsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(PanelALayout.createSequentialGroup()
-                        .addGap(343, 343, 343)
+                        .addGap(374, 374, 374)
                         .addComponent(backButton)))
-                .addGap(220, 220, 220))
+                .addGap(216, 216, 216))
         );
         PanelALayout.setVerticalGroup(
             PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -194,13 +215,23 @@ public final class OptimalConditions extends javax.swing.JFrame {
                         .addComponent(lightButton)))
                 .addGap(24, 24, 24)
                 .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(waterLabel)
-                    .addComponent(optimalWater)
-                    .addComponent(waterField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(waterButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                    .addComponent(watertimeLabel)
+                    .addComponent(watertimeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(waterButton)
+                    .addComponent(optimalWatertime, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelALayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(watertimeintervalLabel)
+                            .addComponent(watertimeintervalField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(watertimeintervalButton)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelALayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(optimalWaterTimeInterval, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
                 .addComponent(backButton)
-                .addGap(62, 62, 62))
+                .addGap(45, 45, 45))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -218,7 +249,13 @@ public final class OptimalConditions extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void tempButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        updateTemp();   
+        try {   
+            updateTemp();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(OptimalConditions.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(OptimalConditions.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }                                          
 
     private void tempFieldActionPerformed(java.awt.event.ActionEvent evt) {                                          
@@ -249,12 +286,16 @@ public final class OptimalConditions extends javax.swing.JFrame {
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
         dispose();
-        new Main().setVisible(true);
+        new MainWindow().setVisible(true);
     }                                          
 
-    public void updateLabels()
+    private void watertimeintervalFieldActionPerformed(java.awt.event.ActionEvent evt) {                                                       
+        // TODO add your handling code here:
+    }                                                      
+
+    public void updateLabels() throws ClassNotFoundException, SQLException
     {
-        try {
+        /*try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/gem","root","Nirda21!ali");
             Statement st = con.createStatement();
@@ -284,27 +325,43 @@ public final class OptimalConditions extends javax.swing.JFrame {
             }
 
         } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+        
+        String query = "SELECT Optimal_Temperature, Optimal_Humidity,Optimal_WaterTime,Optimal_WaterTimeInterval,Optimal_LightLevel FROM optimal_conditions WHERE Username = '"+ GetData.usr +"';";
+        ResultSet rs = LinkJavaMySQL.selectQuery(query);
+        Object[] newValues = new Object[5];
+        while(rs.next())
+        {
+            newValues[0] = rs.getFloat("Optimal_Temperature");
+            newValues[1] = rs.getFloat("Optimal_Humidity");
+            newValues[2] = rs.getInt("Optimal_WaterTime");
+            newValues[3] = rs.getInt("Optimal_WaterTimeInterval");
+            newValues[4] = rs.getInt("Optimal_LightLevel");
         }
+        
+        optimalTemp.setText(String.valueOf(newValues[0]));
+        optimalHumidity.setText(String.valueOf(newValues[1]));
+        optimalWatertime.setText(String.valueOf(newValues[2]));
+        optimalWaterTimeInterval.setText(String.valueOf(newValues[3]));
+        optimalLight.setText(String.valueOf(newValues[4]));
+        
     }
     
-    public void updateTemp()
+    public void updateTemp() throws ClassNotFoundException, SQLException
     {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/gem","root","Nirda21!ali");
-            Statement st = con.createStatement();
-        
-            if(Double.valueOf(tempField.getText()) >= 0)
+       
+
+            if(Float.valueOf(tempField.getText()) >= 0)
             {
-                st.executeUpdate("UPDATE optimal set temp = '" + tempField.getText() + "' where id=1");
+                String query = "UPDATE optimal_conditions set Optimal_Temperature = '" + tempField.getText() + "' WHERE Username = '"+ GetData.usr +"';";
+                boolean v1 = LinkJavaMySQL.insertQuery(query);
                 // add message to UI when value added and updated 
                 optimalTemp.setText(tempField.getText());
                 updateLabels();
+                tempField.setText("");
             }
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(OptimalConditions.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
     }
     public void updateHumidity()
     {
@@ -353,10 +410,10 @@ public final class OptimalConditions extends javax.swing.JFrame {
             Statement st = con.createStatement();
             
         
-            if(Integer.valueOf(waterField.getText()) >= 0)
+            if(Integer.valueOf(watertimeField.getText()) >= 0)
             {
-                st.executeUpdate("UPDATE optimal set water = '" + waterField.getText() + "' where id=1");
-                optimalWater.setText(waterField.getText());
+                st.executeUpdate("UPDATE optimal set water = '" + watertimeField.getText() + "' where id=1");
+                optimalWatertime.setText(watertimeField.getText());
                 updateLabels();
             }
             
@@ -368,7 +425,7 @@ public final class OptimalConditions extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws ClassNotFoundException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -395,8 +452,17 @@ public final class OptimalConditions extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new OptimalConditions().setVisible(true);
+                try {            
+                    new OptimalConditions().setVisible(true);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(OptimalConditions.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(OptimalConditions.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
+            
+            
+                
         });
     }
 
@@ -413,12 +479,16 @@ public final class OptimalConditions extends javax.swing.JFrame {
     private javax.swing.JLabel optimalHumidity;
     private javax.swing.JLabel optimalLight;
     private javax.swing.JLabel optimalTemp;
-    private javax.swing.JLabel optimalWater;
+    private javax.swing.JLabel optimalWaterTimeInterval;
+    private javax.swing.JLabel optimalWatertime;
     private javax.swing.JButton tempButton;
     private javax.swing.JTextField tempField;
     private javax.swing.JLabel tempLabel;
     private javax.swing.JButton waterButton;
-    private javax.swing.JTextField waterField;
-    private javax.swing.JLabel waterLabel;
+    private javax.swing.JTextField watertimeField;
+    private javax.swing.JLabel watertimeLabel;
+    private javax.swing.JButton watertimeintervalButton;
+    private javax.swing.JTextField watertimeintervalField;
+    private javax.swing.JLabel watertimeintervalLabel;
     // End of variables declaration                   
 }
