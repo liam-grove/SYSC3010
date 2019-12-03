@@ -10,13 +10,14 @@ package gem;
  * @author Natalie
  */
 public class InsertToDB {
+    String Username
     /**
      * This method inputs the optimal temperature into the database
      * @param optTemp 
      */
     public void inputOptimalCondidionTemp(Float optTemp){
         try {
-            String query = "INSERT INTO optimal_conditions(Optimal_Temperature); VALUES("+optTemp+")";
+            String query = "INSERT INTO optimal_conditions(Optimal_Temperature) WHERE Username ='"+ username +"; VALUES("+optTemp+")";
             boolean request = LinkJavaMySQL.insertQuery(query);
         } 
         catch (ClassNotFoundException ex) {
@@ -30,7 +31,7 @@ public class InsertToDB {
      */
     public void inputOptimalCondidionHumidity(Float optHumidity){
         try {
-            String query = "INSERT INTO optimal_conditions(Optimal_Humidity); VALUES("+optHumidity+")";
+            String query = "INSERT INTO optimal_conditions(Optimal_Humidity) WHERE Username ='"+ username +"; VALUES("+optHumidity+")";
             boolean request = LinkJavaMySQL.insertQuery(query);
         } catch (ClassNotFoundException ex) {
             System.out.println("Exception: " + ex);
@@ -43,7 +44,7 @@ public class InsertToDB {
      */
     public void inputOptimalConditonLightLevel(int lightLevel){
         try {
-            String query = "INSERT INTO optimal_conditions(Optimal_LightLevel); VALUES("+lightLevel+")";
+            String query = "INSERT INTO optimal_conditions(Optimal_LightLevel) WHERE Username ='"+ username +"; VALUES("+lightLevel+")";
             boolean request = LinkJavaMySQL.insertQuery(query);
         } catch (ClassNotFoundException ex) {
             System.out.println("Exception: " + ex);
