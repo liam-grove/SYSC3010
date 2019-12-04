@@ -2,7 +2,10 @@ package gem;
 
 import java.io.IOException;
 import java.net.*;
+import java.sql.Timestamp;
+
 import java.util.ArrayList;
+import java.util.*;
 
 /**
  *
@@ -10,15 +13,17 @@ import java.util.ArrayList;
  */
 public class UDPClient implements Runnable
 {
-     //client ip address 
+    //client ip address 
     private InetAddress ip;
     //server port 
-    private static final int ServerPort = 56789; 
+    private final int ServerPort = 56789; 
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws UnknownHostException, SocketException, IOException {
+    public static void main(String[] args) {
+        
+        
         /*InetAddress ServerAddress = InetAddress.getByName("172.20.10.3");
         
         //DatagramSocket controlPiSocket;
@@ -85,14 +90,10 @@ public class UDPClient implements Runnable
 
     @Override
     public void run() {
-        
-        
-        
+
         try{
-            
-        
-        
-        InetAddress ServerAddress = InetAddress.getByName("172.20.10.3");
+
+        InetAddress ServerAddress = InetAddress.getByName("172.17.52.4");
         
         //DatagramSocket controlPiSocket;
         
@@ -152,9 +153,15 @@ public class UDPClient implements Runnable
                 float h = Float.valueOf(humidtyStr);
                 int l = Integer.valueOf(light);
                 
-                MainWindow m = new MainWindow(t,h,l);
-                m.updateLabels(t, h, l);
-            
+                Date date = new Date();
+                
+                long t1 = date.getTime();
+                
+                Timestamp time = new Timestamp(t1);
+                inputOptimalCondidionTemp(t, time,h,l);
+                
+                MainWindow.updateCurrent(t,h,l);
+
                 System.out.println("temp: " + t + " humidity: " + h + " light: " + l );
             
             }
@@ -165,5 +172,18 @@ public class UDPClient implements Runnable
      }
     }
     
-     
+    public void inputOptimalCondidionTemp(Float optTemp, Timestamp time,Float optHumidity, int lightLevel ){
+        String user = Login.getUsername();
+        try {
+            
+            //String query = "INSERT INTO collected_data(Username, Temperature, DateTime) VALUES('"+ user +"','"+optTemp+ "','" + time+"');";
+            String query = "INSERT INTO collected_data(Username, Temperature, DateTime,Humidity,LightLevel) VALUES('"+ user +"','"+optTemp+ "','" + time +"','"+ optHumidity +"','"+ lightLevel +"');";
+            boolean request = LinkJavaMySQL.insertQuery(query);
+        } 
+        catch (ClassNotFoundException ex) {
+            System.out.println("Exception: " + ex);
+        }
+    }  
+
+    
 }  
