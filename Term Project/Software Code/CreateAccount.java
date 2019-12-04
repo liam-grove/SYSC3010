@@ -6,6 +6,7 @@
 package gem;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,6 +15,8 @@ import java.util.logging.Logger;
  * @author Nirda
  */
 public class CreateAccount extends javax.swing.JFrame {
+    
+    static String un ; 
 
     /**
      * Creates new form CreateAccount
@@ -36,19 +39,20 @@ public class CreateAccount extends javax.swing.JFrame {
         passwordLabel = new javax.swing.JLabel();
         firstnameLabel = new javax.swing.JLabel();
         lastnameLabel = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        signupButton = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         seperator1 = new javax.swing.JSeparator();
         seperator2 = new javax.swing.JSeparator();
         seperator3 = new javax.swing.JSeparator();
         seperator4 = new javax.swing.JSeparator();
-        jButton2 = new javax.swing.JButton();
+        backButton = new javax.swing.JButton();
         firstnameField = new javax.swing.JTextField();
         lastnameField = new javax.swing.JTextField();
         usernameField = new javax.swing.JTextField();
         passwordField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setLocation(new java.awt.Point(250, 250));
 
         PanelA.setBackground(new java.awt.Color(36, 47, 65));
 
@@ -70,21 +74,21 @@ public class CreateAccount extends javax.swing.JFrame {
         lastnameLabel.setForeground(new java.awt.Color(204, 204, 204));
         lastnameLabel.setText("Last Name");
 
-        jButton1.setText("Sign Up");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        signupButton.setText("Sign Up");
+        signupButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                signupButtonActionPerformed(evt);
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Century Gothic", 1, 24)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(204, 204, 204));
         jLabel5.setText("Sign Up");
 
-        jButton2.setText("<-");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        backButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gem/backbutton.jpg"))); // NOI18N
+        backButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                backButtonActionPerformed(evt);
             }
         });
 
@@ -129,10 +133,6 @@ public class CreateAccount extends javax.swing.JFrame {
             PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelALayout.createSequentialGroup()
                 .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2)
-                    .addGroup(PanelALayout.createSequentialGroup()
-                        .addGap(170, 170, 170)
-                        .addComponent(jLabel5))
                     .addGroup(PanelALayout.createSequentialGroup()
                         .addGap(73, 73, 73)
                         .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -152,16 +152,20 @@ public class CreateAccount extends javax.swing.JFrame {
                             .addComponent(passwordField)))
                     .addGroup(PanelALayout.createSequentialGroup()
                         .addGap(166, 166, 166)
-                        .addComponent(jButton1)))
+                        .addComponent(signupButton))
+                    .addGroup(PanelALayout.createSequentialGroup()
+                        .addGap(149, 149, 149)
+                        .addComponent(jLabel5))
+                    .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(73, Short.MAX_VALUE))
         );
         PanelALayout.setVerticalGroup(
             PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelALayout.createSequentialGroup()
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(firstnameLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(firstnameField, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -186,7 +190,7 @@ public class CreateAccount extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(seperator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(signupButton)
                 .addGap(30, 30, 30))
         );
 
@@ -210,25 +214,38 @@ public class CreateAccount extends javax.swing.JFrame {
         // TODO add your handling code here:
     }                                              
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    private void signupButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
     
+        un = usernameField.getText();
         try {
             String query = "SELECT First_Name,Last_Name,Username,Password FROM login_information WHERE First_Name = '"+ firstnameField.getText() +"' AND Last_Name = '"+ lastnameField.getText() +"' AND Username = '"+ usernameField.getText() +"' AND Password = '"+ passwordField.getText() +"' ;";
             ResultSet rs = LinkJavaMySQL.selectQuery(query);
+            if(rs.next())
+            {
+                System.out.println("Account already exists");
+            }
+            else
+            {
+                String query1 = "INSERT INTO login_information (First_Name,Last_Name,Username,Password) VALUES ('"+ firstnameField.getText() +"','" + lastnameField.getText() +"','" +  usernameField.getText() +"','" + passwordField.getText() +"');";
+                boolean rs1 = LinkJavaMySQL.insertQuery(query1);
+            }
             
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(CreateAccount.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }                                        
+        
+        dispose();
+        new Setup().setVisible(true);
+    }                                            
 
     private void usernameFieldActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // TODO add your handling code here:
     }                                             
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
         dispose();
-        new MainWindow().setVisible(true);
-    }                                        
+        new Login().setVisible(true);
+    }                                          
 
     private void passwordFieldActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // TODO add your handling code here:
@@ -268,13 +285,18 @@ public class CreateAccount extends javax.swing.JFrame {
             }
         });
     }
+    
+    public static String getUsername()
+    {
+        return un;
+    
+    }
 
     // Variables declaration - do not modify                     
     private javax.swing.JPanel PanelA;
+    private javax.swing.JButton backButton;
     private javax.swing.JTextField firstnameField;
     private javax.swing.JLabel firstnameLabel;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JTextField lastnameField;
     private javax.swing.JLabel lastnameLabel;
@@ -284,6 +306,7 @@ public class CreateAccount extends javax.swing.JFrame {
     private javax.swing.JSeparator seperator2;
     private javax.swing.JSeparator seperator3;
     private javax.swing.JSeparator seperator4;
+    private javax.swing.JButton signupButton;
     private javax.swing.JTextField usernameField;
     private javax.swing.JLabel usernameLabel;
     // End of variables declaration                   
