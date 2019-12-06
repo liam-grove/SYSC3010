@@ -108,7 +108,7 @@ public class ControlPi {
 
             int row = 0;
             while(rs.next()){
-                Date date = rs.getTime("DateTime");
+                Date date = rs.getTimestamp("DateTime");
                 Float temp = rs.getFloat("Temperature");
                 Float hum = rs.getFloat("Humidity");
                 int light = rs.getInt("LightLevel");
