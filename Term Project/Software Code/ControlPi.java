@@ -96,28 +96,26 @@ public class ControlPi {
     }
     
     /**
-     * This method gets the last 9 data inputs into the system
+     * This method gets the last 10 data inputs into the system
      * @return 
      */
     public static Object[][] getData(){
-        Object[][] data = new Object[10][6];
+        Object[][] data = new Object[10][4];
         try{
             //SELECT * FROM collected_data Where Username = 'natalie' ORDER BY id DESC LIMIT 10 ;
-            String query = "SELECT Date, Time, Temperature, Humidity, LightLevel FROM collected_data WHERE Username = '"+ GetData.usr +"' ORDER BY id DESC LIMIT 10";
+            String query = "SELECT DateTime, Temperature, Humidity, LightLevel FROM collected_data WHERE Username = '"+ GetData.usr +"' ORDER BY id DESC LIMIT 10";
             ResultSet rs = LinkJavaMySql.selectQuery(query);
 
             int row = 0;
             while(rs.next()){
-                Date date = rs.getDate("Date");
-                Time time = rs.getTime("Time");
+                Date date = rs.getTime("DateTime");
                 Float temp = rs.getFloat("Temperature");
                 Float hum = rs.getFloat("Humidity");
                 int light = rs.getInt("LightLevel");
                 data[row][0] = date;
-                data[row][1] = time;
-                data[row][2] = temp;
-                data[row][3] = hum;
-                data[row][4] = light; 
+                data[row][1] = temp;
+                data[row][2] = hum;
+                data[row][3] = light; 
                 row++;
             }
             rs.close();
