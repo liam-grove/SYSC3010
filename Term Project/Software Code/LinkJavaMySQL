@@ -27,6 +27,12 @@ public class LinkJavaMySQL {
         
     }
     
+    /**
+     * This method is used to access the database when collecting data from the database
+     * @param query
+     * @return
+     * @throws ClassNotFoundException 
+     */
     public static ResultSet selectQuery(String query) throws ClassNotFoundException {
         
        try {
@@ -51,6 +57,12 @@ public class LinkJavaMySQL {
         return rs;
     }
     
+    /**
+     * This method is used to insert information into the database or update information into the database
+     * @param query
+     * @return
+     * @throws ClassNotFoundException 
+     */
     public static boolean insertQuery(String query) throws ClassNotFoundException {
         
         boolean result = true;
@@ -76,7 +88,7 @@ public class LinkJavaMySQL {
             //try { rs.close(); } catch(SQLException se) { /*can't do anything */ }
         }
         
-        return result;
+        return result; //returns the result set of the query
     }
     
 }
