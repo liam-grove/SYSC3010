@@ -1,12 +1,7 @@
 package gem;
 
-import java.sql.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -23,7 +18,6 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
-        
     }
 
     /**
@@ -209,9 +203,12 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void UsernameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {                                                  
-        // TODO add your handling code here:
+    
     }                                                 
-
+    /**
+     * This method is only used when the login button is pressed
+     * @param evt 
+     */
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {                                            
         
         //Get user entered data from username and password fields 
@@ -219,18 +216,8 @@ public class Login extends javax.swing.JFrame {
         un = username;
         char[] pass = PasswordField.getPassword();
         String password = new String(pass);
-        boolean found = false;
-        System.out.println("before try");
         
         try {
-            System.out.println("after try");
-            /*String url = "jdbc:mysql://172.20.10.3:3306/greenhouse";
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url,"nirda","password");
-            System.out.println("after connection");
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT Username,Password FROM login_information WHERE Username = \"" + username + "\" AND Password = \"" + password + "\"");*/
-            
             String query = "SELECT Username,Password FROM login_information WHERE Username = \"" + username + "\" AND Password = \"" + password + "\"";
             ResultSet rs = LinkJavaMySQL.selectQuery(query);
             if(rs.next())
@@ -241,27 +228,27 @@ public class Login extends javax.swing.JFrame {
             }
             else 
             {
+                //If login is incorrect, a message is displayed
                 JOptionPane.showMessageDialog(null,"Invalid Login Details", "Login Error", JOptionPane.ERROR_MESSAGE);
                 UsernameTextField.setText(null);
                 PasswordField.setText(null);
-            
-            }  
-            
-            rs.close();
-          //  con.close();
-                        
-        } catch (ClassNotFoundException | SQLException ex) {
+            }   
+            rs.close();               
+        } 
+        catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-
         
     }                                           
 
     private void PasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        // TODO add your handling code here:
+
     }                                             
 
+    /**
+     * This method is used when the create account button action is performed
+     * @param evt 
+     */
     private void createaccountButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                    
         dispose();
         new CreateAccount().setVisible(true);
@@ -302,14 +289,15 @@ public class Login extends javax.swing.JFrame {
         });
     }
     
+    /**
+     * This method returns the username used to login
+     * @return 
+     */
     public static String getUsername()
     {
         return un;
-    
     }
     
-   
-
     // Variables declaration - do not modify                     
     private javax.swing.JButton LoginButton;
     private javax.swing.JPanel PanelA;
