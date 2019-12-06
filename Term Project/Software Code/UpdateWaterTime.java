@@ -4,10 +4,6 @@ import java.io.IOException;
 import java.net.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-
-import java.util.ArrayList;
-import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,17 +12,19 @@ import java.util.logging.Logger;
  * @author Nirda
  */
 public class UpdateWaterTime implements Runnable{
-    
-    //client ip address 
-    private InetAddress ip;
+    //server ip address 
+    private String ip = "172.17.52.4"; 
     //server port 
     private final int ServerPort = 56789; 
-    
     int t; 
     
-    public static void main(String[] args)
-    {}
+    public static void main(String[] args){
+        
+    }
     
+    /**
+     * This method is used to sends how long the plant is watered to the data pi.
+     */
     @Override
     public void run() 
     {
@@ -44,9 +42,11 @@ public class UpdateWaterTime implements Runnable{
                     t = rs.getInt("Optimal_WaterTime");
                     System.out.println(t);
                 }
-            } catch (ClassNotFoundException ex) {
+            } 
+            catch (ClassNotFoundException ex) {
                 Logger.getLogger(UpdateWaterTime.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {
+            } 
+            catch (SQLException ex) {
                 Logger.getLogger(UpdateWaterTime.class.getName()).log(Level.SEVERE, null, ex);
             }
             System.out.println("out of try 2");
@@ -62,9 +62,8 @@ public class UpdateWaterTime implements Runnable{
             DatagramPacket initalMessage = new DatagramPacket(IM,IM.length,ServerAddress,ServerPort);
             clientSocket.send(initalMessage);
         }
-        catch(IOException e)
-        {}
+        catch(IOException e){
+            Logger.getLogger(UpdateWaterInterval.class.getName()).log(Level.SEVERE, null, e);
+        } 
     }
-
-    
 }
