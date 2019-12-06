@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  */
 public final class OptimalConditions extends javax.swing.JFrame {
     
-    String user = Login.getUsername();
+    String user = Login.getUsername(); //Username of the user. To be used for inputting into the database
 
     /**
      * Creates new form called OptimalConditions. This form can then
@@ -389,7 +389,8 @@ public final class OptimalConditions extends javax.swing.JFrame {
         try {
             String query1 = "UPDATE optimal_conditions set Optimal_WaterTime = '"+ watertimeField.getText() + "' WHERE Username = '"+ user +"';";
             LinkJavaMySQL.insertQuery(query1);
-        } catch (ClassNotFoundException ex) {
+        } 
+        catch (ClassNotFoundException ex) {
             Logger.getLogger(OptimalConditions.class.getName()).log(Level.SEVERE, null, ex);
         }
        
@@ -411,7 +412,8 @@ public final class OptimalConditions extends javax.swing.JFrame {
         try {
             String query1 = "UPDATE optimal_conditions set Optimal_WaterTimeInterval = '"+ waterintervalField.getText() + "' WHERE Username = '"+ user +"';";
             LinkJavaMySQL.insertQuery(query1);
-        } catch (ClassNotFoundException ex) {
+        } 
+        catch (ClassNotFoundException ex) {
             Logger.getLogger(OptimalConditions.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -435,8 +437,7 @@ public final class OptimalConditions extends javax.swing.JFrame {
         ResultSet rs = LinkJavaMySQL.selectQuery(query);
         Object[] newValues = new Object[5];
         
-        while(rs.next())
-        {
+        while(rs.next()){
             newValues[0] = rs.getFloat("Optimal_Temperature");
             newValues[1] = rs.getFloat("Optimal_Humidity");
             newValues[2] = rs.getInt("Optimal_LightLevel");
