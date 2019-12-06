@@ -5,12 +5,8 @@
  */
 package gem;
 
-import java.awt.Color;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,13 +19,14 @@ public final class OptimalConditions extends javax.swing.JFrame {
     String user = Login.getUsername();
 
     /**
-     * Creates new form OptimalConditions
+     * Creates new form called OptimalConditions. This form can then
+     * be used to input the optimal conditions into the database.
+     * @throws java.lang.ClassNotFoundException
+     * @throws java.sql.SQLException
      */
     public OptimalConditions() throws ClassNotFoundException, SQLException {
         initComponents();
         updateLabels();
-        
-        
     }
 
     /**
@@ -240,7 +237,6 @@ public final class OptimalConditions extends javax.swing.JFrame {
                 .addGap(41, 41, 41)
                 .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(PanelALayout.createSequentialGroup()
-                        .addGap(1, 1, 1)
                         .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(tempButton)
                             .addComponent(tempField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -249,9 +245,9 @@ public final class OptimalConditions extends javax.swing.JFrame {
                             .addComponent(humidityField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(humidityButton)))
                     .addGroup(PanelALayout.createSequentialGroup()
-                        .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(tempLabel)
-                            .addComponent(optimalTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(optimalTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tempLabel))
                         .addGap(25, 25, 25)
                         .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(humidityLabel)
@@ -271,12 +267,13 @@ public final class OptimalConditions extends javax.swing.JFrame {
                             .addComponent(waterintervalField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(waterintervalButton))
                         .addGap(25, 25, 25)
-                        .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(watertimeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(watertimeButton)
+                        .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(PanelALayout.createSequentialGroup()
                                 .addComponent(optimalWatertime, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
-                                .addGap(5, 5, 5))))
+                                .addGap(5, 5, 5))
+                            .addGroup(PanelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(watertimeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(watertimeButton))))
                     .addGroup(PanelALayout.createSequentialGroup()
                         .addComponent(waterintervalLabel)
                         .addGap(25, 25, 25)
@@ -299,13 +296,20 @@ public final class OptimalConditions extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>                        
-
+    
+    /**
+     * This method updates optimal temperature in the database when 
+     * the change button for the temperature is pressed
+     * @param evt 
+     */
     private void tempButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
         try {   
             updateTemp();
-        } catch (ClassNotFoundException ex) {
+        } 
+        catch (ClassNotFoundException ex) {
             Logger.getLogger(OptimalConditions.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } 
+        catch (SQLException ex) {
             Logger.getLogger(OptimalConditions.class.getName()).log(Level.SEVERE, null, ex);
         }
     }                                          
@@ -319,53 +323,72 @@ public final class OptimalConditions extends javax.swing.JFrame {
     }                                             
 
     private void lightFieldActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
-    }                                          
-
-    private void humidityButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
         
+    }                                          
+    
+    /**
+     * This method updates optimal humidity in the database when 
+     * the change button for the humidity is pressed
+     * @param evt 
+     */
+    private void humidityButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
         try {
             updateHumidity();
-        } catch (ClassNotFoundException ex) {
+        } 
+        catch (ClassNotFoundException ex) {
             Logger.getLogger(OptimalConditions.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } 
+        catch (SQLException ex) {
             Logger.getLogger(OptimalConditions.class.getName()).log(Level.SEVERE, null, ex);
         }
     }                                              
-
+    
+    /**
+     * This method updates optimal light level in the database when 
+     * the change button for the light level is pressed
+     * @param evt 
+     */
     private void lightButtonActionPerformed(java.awt.event.ActionEvent evt) {                                            
         try {
             updateLight();
-        } catch (ClassNotFoundException ex) {
+        } 
+        catch (ClassNotFoundException ex) {
             Logger.getLogger(OptimalConditions.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } 
+        catch (SQLException ex) {
             Logger.getLogger(OptimalConditions.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }                                           
-
+    /**
+     * This method allows the user to go back to the main window which
+     * displays the current conditions
+     * @param evt 
+     */
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
         dispose();
         new MainWindow().setVisible(true);
     }                                          
 
     private void watertimeFieldActionPerformed(java.awt.event.ActionEvent evt) {                                               
-
-        
-        
-        
+   
     }                                              
 
     private void waterintervalFieldActionPerformed(java.awt.event.ActionEvent evt) {                                                   
 
     }                                                  
 
+    /**
+     * This method updates optimal watering time in the database when 
+     * the change button for the watering time is pressed
+     * @param evt 
+     */
     private void watertimeButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                
         String user = Login.getUsername();
         
         try {
             String query1 = "UPDATE optimal_conditions set Optimal_WaterTime = '"+ watertimeField.getText() + "' WHERE Username = '"+ user +"';";
-            boolean rs1 = LinkJavaMySQL.insertQuery(query1);
+            LinkJavaMySQL.insertQuery(query1);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(OptimalConditions.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -377,29 +400,41 @@ public final class OptimalConditions extends javax.swing.JFrame {
         object.start();
     }                                               
 
+    /**
+     * This method updates optimal watering time interval in the database when 
+     * the change button for the watering time interval is pressed
+     * @param evt 
+     */
     private void waterintervalButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                    
-       String user = Login.getUsername();
+        String user = Login.getUsername();
         
         try {
             String query1 = "UPDATE optimal_conditions set Optimal_WaterTimeInterval = '"+ waterintervalField.getText() + "' WHERE Username = '"+ user +"';";
-            boolean rs1 = LinkJavaMySQL.insertQuery(query1);
+            LinkJavaMySQL.insertQuery(query1);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(OptimalConditions.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         optimalWaterinterval.setText(waterintervalField.getText());
         waterintervalField.setText("");
-        
         Thread object = new Thread(new UpdateWaterTime());
         object.start();
     }                                                   
-
-    public void updateLabels() throws ClassNotFoundException, SQLException
-    {
-
+    
+    /**
+     * This method updates the labels displaying the optimal conditions 
+     * @throws ClassNotFoundException
+     * @throws SQLException 
+     */
+    public void updateLabels() throws ClassNotFoundException, SQLException{
+        /*
+        Below is the query used in the database to acquire the current optimal 
+        conditions set in the database
+        */
         String query = "SELECT Optimal_Temperature, Optimal_Humidity,Optimal_LightLevel,Optimal_WaterTime,Optimal_WaterTimeInterval FROM optimal_conditions WHERE Username = '"+ user +"';";
         ResultSet rs = LinkJavaMySQL.selectQuery(query);
         Object[] newValues = new Object[5];
+        
         while(rs.next())
         {
             newValues[0] = rs.getFloat("Optimal_Temperature");
@@ -408,6 +443,7 @@ public final class OptimalConditions extends javax.swing.JFrame {
             newValues[3] = rs.getInt("Optimal_WaterTime");
             newValues[4] = rs.getInt("Optimal_WaterTimeInterval");
         }
+        
         optimalTemp.setText(String.valueOf(newValues[0]));
         optimalHumidity.setText(String.valueOf(newValues[1]));
         optimalLight.setText(String.valueOf(newValues[2])); 
@@ -415,25 +451,33 @@ public final class OptimalConditions extends javax.swing.JFrame {
         optimalWaterinterval.setText(String.valueOf(newValues[4]));
     }
     
-    public void updateTemp() throws ClassNotFoundException, SQLException
-    {
-        if(Float.valueOf(tempField.getText()) >= 0)
-        {
+    /**
+     * This method updates the optimal temperature in the database
+     * @throws ClassNotFoundException
+     * @throws SQLException 
+     */
+    public void updateTemp() throws ClassNotFoundException, SQLException{
+        if(Float.valueOf(tempField.getText()) >= 0){
             String query = "UPDATE optimal_conditions set Optimal_Temperature = '" + tempField.getText() + "' WHERE Username = '"+ user +"';";
-            boolean v1 = LinkJavaMySQL.insertQuery(query);
+            LinkJavaMySQL.insertQuery(query);
+            
             // add message to UI when value added and updated 
             optimalTemp.setText(tempField.getText());
             updateLabels();
             tempField.setText("");
         }
-
     }
-    public void updateHumidity() throws ClassNotFoundException, SQLException
-    {
-        if(Float.valueOf(humidityField.getText()) >= 0)
-        {
+    
+    /**
+     * This method updates the optimal humidity in the database
+     * @throws ClassNotFoundException
+     * @throws SQLException 
+     */
+    public void updateHumidity() throws ClassNotFoundException, SQLException{
+        if(Float.valueOf(humidityField.getText()) >= 0){
             String query = "UPDATE optimal_conditions set Optimal_Humidity = '" + humidityField.getText() + "' WHERE Username = '"+ user +"';";
-            boolean v1 = LinkJavaMySQL.insertQuery(query);
+            LinkJavaMySQL.insertQuery(query);
+            
             // add message to UI when value added and updated 
             optimalHumidity.setText(humidityField.getText());
             updateLabels();
@@ -441,13 +485,16 @@ public final class OptimalConditions extends javax.swing.JFrame {
         }
     }
     
-    public void updateLight() throws ClassNotFoundException, SQLException
-    {
-        
-        if(Float.valueOf(lightField.getText()) >= 0)
-        {
+    /**
+     * This method updates the optimal light level in the database
+     * @throws ClassNotFoundException
+     * @throws SQLException 
+     */
+    public void updateLight() throws ClassNotFoundException, SQLException{
+        if(Float.valueOf(lightField.getText()) >= 0){
             String query = "UPDATE optimal_conditions set Optimal_LightLevel = '" + lightField.getText() + "' WHERE Username = '"+ user +"';";
-            boolean v1 = LinkJavaMySQL.insertQuery(query);
+            LinkJavaMySQL.insertQuery(query);
+            
             // add message to UI when value added and updated 
             lightField.setText(lightField.getText());
             updateLabels();
@@ -487,15 +534,14 @@ public final class OptimalConditions extends javax.swing.JFrame {
             public void run() {
                 try {            
                     new OptimalConditions().setVisible(true);
-                } catch (ClassNotFoundException ex) {
+                } 
+                catch (ClassNotFoundException ex) {
                     Logger.getLogger(OptimalConditions.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
+                } 
+                catch (SQLException ex) {
                     Logger.getLogger(OptimalConditions.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
-            
-            
-                
+            }     
         });
     }
 
