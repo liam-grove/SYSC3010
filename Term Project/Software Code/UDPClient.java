@@ -20,7 +20,11 @@ public class UDPClient implements Runnable{
     public static void main(String[] args){
         
     }
-
+    
+    /**
+     * This receives messages from the data pi through the server. These 
+     * messages contain the current condition of the greenhouse.
+     */
     @Override
     public void run() {
         try{
