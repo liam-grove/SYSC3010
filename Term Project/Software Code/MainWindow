@@ -236,9 +236,16 @@ public class MainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>                        
 
-    private void CreateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                   
-
-    }                                                  
+private void CreateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                   
+        try {
+            dispose();
+            new Report().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }                                                 
 
     private void ChangeOptimalButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                    
         dispose();
