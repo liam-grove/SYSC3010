@@ -235,8 +235,13 @@ public class MainWindow extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>                        
-
-private void CreateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                   
+    
+    /**
+     * This method is used to create a report based on that data that has been 
+     * collected in the past ten entries.
+     * @param evt 
+     */
+    private void CreateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                   
         try {
             dispose();
             new Report().setVisible(true);
@@ -246,7 +251,12 @@ private void CreateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }                                                 
-
+    
+    /**
+     * This method is used to change(or view) the optimal optimal conditions in 
+     * the database.
+     * @param evt 
+     */
     private void ChangeOptimalButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                    
         dispose();
         try {
