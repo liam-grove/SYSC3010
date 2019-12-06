@@ -178,6 +178,9 @@ public class Report extends javax.swing.JFrame {
         });
     }
     
+    /**
+     * This method is used to make the table for the user's report 
+     */
     public void makeTable() throws SQLException, ClassNotFoundException{
         String user = Login.getUsername();
         String[] column = {"Date Time", "Temperature", "Humidity","Light Level"};
