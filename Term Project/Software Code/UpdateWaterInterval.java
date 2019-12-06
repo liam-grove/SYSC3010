@@ -18,7 +18,7 @@ public class UpdateWaterInterval implements Runnable{
     private String ip = "172.17.52.4"; 
     //server port 
     private final int ServerPort = 56789; 
-    int t; 
+    int t; //variable used to get the watering time interval
     
     public static void main(String[] args){
     
