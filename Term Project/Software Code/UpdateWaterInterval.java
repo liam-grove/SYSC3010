@@ -14,31 +14,34 @@ import java.util.logging.Logger;
  * @author Nirda
  */
 public class UpdateWaterInterval implements Runnable{
-    
-    //client ip address 
-    private InetAddress ip;
+    //server ip address 
+    private String ip = "172.17.52.4"; 
     //server port 
     private final int ServerPort = 56789; 
     int t; 
     
-    public static void main(String[] args)
-    {
+    public static void main(String[] args){
     
     }
     
+    /**
+     * This method is used to sends how long till the plant is watered again i.e watering 
+     * time interval to the data pi.
+     */
     @Override
     public void run() {
-        try
-        {
+        try{
+            //Selects the water time interval from optimal conditions
             String query = "SELECT Optimal_WaterTimeInterval FROM optimal_conditions";
             ResultSet rs = LinkJavaMySQL.selectQuery(query);
-            while(rs.next())
-            {
+            
+            while(rs.next()){
                 t = rs.getInt("Optimal_WaterTimeInterval");
             }
             
             DatagramSocket clientSocket = new DatagramSocket();
-            InetAddress ServerAddress = InetAddress.getByName("172.20.10.3");
+            InetAddress ServerAddress = InetAddress.getByName(ip);
+            
             //Send Boot up message to server 
             byte[] IM = new byte[50];
             String message = "cpi:ser:WATER1:"+ String.valueOf(t);
@@ -47,11 +50,14 @@ public class UpdateWaterInterval implements Runnable{
             clientSocket.send(initalMessage);
         }
         catch(IOException e)
-        {} catch (SQLException ex) {
+        {
+            Logger.getLogger(UpdateWaterInterval.class.getName()).log(Level.SEVERE, null, e);
+        } 
+        catch (SQLException ex) {
             Logger.getLogger(UpdateWaterInterval.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } 
+        catch (ClassNotFoundException ex) {
             Logger.getLogger(UpdateWaterInterval.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
+    } 
 }
