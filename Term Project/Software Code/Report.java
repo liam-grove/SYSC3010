@@ -112,13 +112,19 @@ public class Report extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>                        
-
+    
+    /**
+     * This method is only used when the Display button is pressed
+     * @param evt 
+     */
     private void changeButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
         try {
             makeTable();
-        } catch (SQLException ex) {
+        } 
+        catch (SQLException ex) {
             Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } 
+        catch (ClassNotFoundException ex) {
             Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
         }
     }                                            
@@ -139,13 +145,17 @@ public class Report extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
+        } 
+        catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(Report.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
+        } 
+        catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(Report.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
+        } 
+        catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(Report.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } 
+        catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Report.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
@@ -156,9 +166,11 @@ public class Report extends javax.swing.JFrame {
         
                 try {
                     new Report().setVisible(true);
-                } catch (SQLException ex) {
+                } 
+                catch (SQLException ex) {
                     Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
+                } 
+                catch (ClassNotFoundException ex) {
                     Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
@@ -166,8 +178,7 @@ public class Report extends javax.swing.JFrame {
         });
     }
     
-    public void makeTable() throws SQLException, ClassNotFoundException
-    {
+    public void makeTable() throws SQLException, ClassNotFoundException{
         String user = Login.getUsername();
         String[] column = {"Date Time", "Temperature", "Humidity","Light Level"};
         Object[][] data = ControlPi.getData();
@@ -175,14 +186,11 @@ public class Report extends javax.swing.JFrame {
         String[][] dataStr = new String[10][4]; 
         System.out.println(data);
         
-        for(int row=0; row<=9; row++)
-            {
-                for(int col=0; col <= 3; col++)
-                {
-                    dataStr[row][col] = data[row][col].toString();
-                   
-                }
+        for(int row=0; row<=9; row++){
+            for(int col=0; col <= 3; col++){
+                dataStr[row][col] = data[row][col].toString();   
             }
+        }
         DefaultTableModel model = (DefaultTableModel) myTable.getModel();
         model.setDataVector(dataStr,column);
 
