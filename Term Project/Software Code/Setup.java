@@ -5,7 +5,6 @@
  */
 package gem;
 
-import java.sql.ResultSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -207,23 +206,28 @@ public class Setup extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void temperatureFieldActionPerformed(java.awt.event.ActionEvent evt) {                                                 
-        // TODO add your handling code here:
+
     }                                                
 
     private void humidityFieldActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        // TODO add your handling code here:
+
     }                                             
 
     private void setButtonActionPerformed(java.awt.event.ActionEvent evt) {                                          
+        /*
+        First gets the username that was used to create the account.
+        The username is then used as a primary key in the database to identify
+        the optimal conditions to this user.
+        */
         String user = CreateAccount.getUsername();
         try {
             if (Float.valueOf(temperatureField.getText())> 0 & Float.valueOf(humidityField.getText())> 0 & Integer.valueOf(lightField.getText())> 0 )
             {
                 String query = "INSERT INTO optimal_conditions (Username,Optimal_Temperature,Optimal_Humidity,Optimal_LightLevel,Optimal_WaterTime,Optimal_WaterTimeInterval) VALUES ('"+user+"','" + temperatureField.getText() +"','" + humidityField.getText() +"','" + lightField.getText()+"','" + watertimeField.getText()+"','" + waterintervalField.getText() +"');";
-                boolean rs1 = LinkJavaMySQL.insertQuery(query);
+                LinkJavaMySQL.insertQuery(query);
             }
-            
-        } catch (ClassNotFoundException ex) {
+        } 
+        catch (ClassNotFoundException ex) {
             Logger.getLogger(Setup.class.getName()).log(Level.SEVERE, null, ex);
         }
         
