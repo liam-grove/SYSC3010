@@ -237,7 +237,7 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void CreateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                   
-        // TODO add your handling code here:
+
     }                                                  
 
     private void ChangeOptimalButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                    
