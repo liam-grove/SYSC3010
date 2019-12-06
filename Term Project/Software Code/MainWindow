@@ -1,11 +1,8 @@
 package gem;
 
 import java.awt.Color;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,13 +12,6 @@ import java.util.logging.Logger;
  */
 public class MainWindow extends javax.swing.JFrame {
     
-    public static   float temp ;
-    public static  float hum ; 
-    public  static int light ;
-    
-    public float t1;
-    public float h1;
-    public int l1;
     /**
      * Creates new form Main
      */
@@ -30,7 +20,6 @@ public class MainWindow extends javax.swing.JFrame {
         Thread object = new Thread(new UDPClient());
         object.start();
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -255,9 +244,11 @@ public class MainWindow extends javax.swing.JFrame {
         dispose();
         try {
             new OptimalConditions().setVisible(true);
-        } catch (ClassNotFoundException ex) {
+        } 
+        catch (ClassNotFoundException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } 
+        catch (SQLException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }                                                   
@@ -290,7 +281,7 @@ public class MainWindow extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the Main Window*/
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MainWindow().setVisible(true);
@@ -298,75 +289,76 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
     }
-   
-    public static void updateLabels(float t, float h, int l)
-    {
-        temp = t;
-        hum = h;
-        light = l; 
-
-        
-    }
     
-    
+    /**
+     * This method is used to update the current conditions shown to the user in the Main Window
+     * @param t
+     * @param h
+     * @param l
+     * @throws SQLException 
+     */
     public static void updateCurrent(float t, float h, int l) throws SQLException 
     {
+        //Initializing the ideal temperature, humidity and the lightlevel before the try-catch statement
         float idealTemp = 0;
         float idealHumidity = 0;
         int idealLight = 0;
 
-        try {
-
+        try{
+            /*
+            The ideal temperatures that the user previously inputed are collected from the 
+            database first to be used in the comparison with the current conditions
+            */
             String query1 = "SELECT Optimal_Temperature FROM optimal_conditions";
             ResultSet rs1 = LinkJavaMySQL.selectQuery(query1);
-            while(rs1.next())
-            {
+            while(rs1.next()){
                 idealTemp = rs1.getFloat("Optimal_Temperature");
             }
             
             String query2 = "SELECT Optimal_Humidity FROM optimal_conditions";
             ResultSet rs2 = LinkJavaMySQL.selectQuery(query2);
-            while(rs2.next())
-            {
+            while(rs2.next()){
                 idealHumidity = rs2.getFloat("Optimal_Humidity");
             }
             
             String query3 = "SELECT Optimal_LightLevel FROM optimal_conditions";
             ResultSet rs3 = LinkJavaMySQL.selectQuery(query3);
-            while(rs3.next())
-            {
+            while(rs3.next()){
                 idealLight = rs3.getInt("Optimal_LightLevel");               
             }
-
-
-            if(t<idealTemp)
-            {
+            
+            /*
+            A check to see if the temperature reading is within a certain range given the optimal conditions
+            for the temperature, humidity and the light level
+            */
+            if((t < (idealTemp + 5)) & (t > (idealTemp - 5))){
                 CurrentTempLabel.setText(String.valueOf(t));
                 CurrentTempLabel.setForeground(Color.green);
-            }else{
+            }
+            else{
                 CurrentTempLabel.setText(String.valueOf(t));
                 CurrentTempLabel.setForeground(Color.red);
             }
             
-            if(h<idealHumidity)
-            {
+            if((h < (idealHumidity + 10)) & (h > (idealHumidity - 10))){
                 CurrentHumidityLabel.setText(String.valueOf(h));
                 CurrentHumidityLabel.setForeground(Color.green);
-            }else{
+            }
+            else{
                 CurrentHumidityLabel.setText(String.valueOf(h));
                 CurrentHumidityLabel.setForeground(Color.red);
             }
             
-            if(l>idealLight)
-            { 
+            if((l < (idealLight + 100)) &(l > (idealLight - 100))){ 
                 CurrentLightLabel.setText(String.valueOf(l));
                 CurrentLightLabel.setForeground(Color.green);
-            }else{
+            }
+            else{
                 CurrentLightLabel.setText(String.valueOf(l));
                 CurrentLightLabel.setForeground(Color.red);
             }
-
-        } catch (ClassNotFoundException | SQLException ex) {
+        } 
+        catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
 
