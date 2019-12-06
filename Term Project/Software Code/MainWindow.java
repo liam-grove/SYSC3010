@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 public class MainWindow extends javax.swing.JFrame {
     
     /**
-     * Creates new form Main
+     * Creates new form Main Window
      */
     public MainWindow() {
         initComponents();
