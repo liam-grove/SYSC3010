@@ -12,10 +12,9 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Nirda 
+ * @author Nirda
  */
 public class CreateAccount extends javax.swing.JFrame {
-    
     //This is the username that the user has chosen.
     static String un ; 
 
@@ -212,12 +211,16 @@ public class CreateAccount extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void firstnameFieldActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
 
+    }                                              
+    
+    /**
+     * This method is used to perform a sign  up for a new user 
+     **/
     private void signupButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
-        
-        un = usernameField.getText(); //Gets the username that the user has inputted
+
+        un = usernameField.getText();  //Gets the username that the user has inputted
+
         try {
             //First a check to see if this username exists in the database
             String query = "SELECT First_Name,Last_Name,Username,Password FROM login_information WHERE First_Name = '"+ firstnameField.getText() +"' AND Last_Name = '"+ lastnameField.getText() +"' AND Username = '"+ usernameField.getText() +"' AND Password = '"+ passwordField.getText() +"' ;";
@@ -233,30 +236,29 @@ public class CreateAccount extends javax.swing.JFrame {
                 boolean rs1 = LinkJavaMySQL.insertQuery(query1);
             }
             
-        }
-        catch (ClassNotFoundException | SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(CreateAccount.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         //After creating the account, the user is prompted to enter in their optimal conditions into the table.
         dispose();
         new Setup().setVisible(true);
     }                                            
 
     private void usernameFieldActionPerformed(java.awt.event.ActionEvent evt) {                                              
-
+        
     }                                             
-    
-    /*
-    Returns the user back to the login page if the back button is pressed
-    */
-    
+    /**
+     * Returns the user back to the login page if the back button is pressed
+     * @param evt 
+     */
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
         dispose();
         new Login().setVisible(true);
     }                                          
 
     private void passwordFieldActionPerformed(java.awt.event.ActionEvent evt) {                                              
-
+        
     }                                             
 
     /**
@@ -294,10 +296,10 @@ public class CreateAccount extends javax.swing.JFrame {
         });
     }
     
-    /*
-    Returns the username created by the user
-    @return un - username used by the user
-    */
+    /**
+     * Returns the username that the user created
+     * @return username 
+     */
     public static String getUsername()
     {
         return un;
