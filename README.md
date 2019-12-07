@@ -42,6 +42,7 @@ Setting up the server:
  - The IP addresses and ports were hardcoded for a personal laptop and so will have to be changed manually. 
 
 
+
 NOTE: All IP addresses need to be configured to the user’s specific WLAN in the following files:
 
 - Control Pi: UDPClient.java, LinkJavaMySQL.java, UpdateWaterTime.java, UpdateWaterTimeInterval.java
@@ -49,6 +50,7 @@ NOTE: All IP addresses need to be configured to the user’s specific WLAN in th
 - Server Computer: GEM_UDP_Server.java
 
 - Data Pi: GEM_Data_Pi.py
+
 
 
 Run Sequence:
@@ -66,11 +68,13 @@ Run Sequence:
 6. Run the Data Pi file.
 
 
+
  If the user wants to change their optimal conditions:
  
 - Click the change optimal conditions button.
 
 - A new window will pop up where the user may change optimal conditions.
+
 
 
 
