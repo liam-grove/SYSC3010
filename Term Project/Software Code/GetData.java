@@ -5,10 +5,8 @@
  */
 package gem;
 
-import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.Arrays;
-import java.util.Scanner;
 
 /**
  *
@@ -16,8 +14,7 @@ import java.util.Scanner;
  */
 public class GetData {
 
-    public static String usr = "natalie";
-    public static String pass = "password";
+    public static String usr = Login.getUsername();
     
     /**
      * Gets the current data of the user and displays it.
@@ -28,7 +25,7 @@ public class GetData {
     public static Object[] getCurrentData(String table){
         Object data[] = new Object[6];
         try{
-            String query = "SELECT Username, Date, Time, Temperature, Humidity, LightLevel FROM "+ table +" WHERE Username = '"+ usr +"'"; 
+            String query = "SELECT DateTime, Temperature, Humidity, LightLevel FROM "+ table +" WHERE Username = '"+ usr +"'"; 
             ResultSet rs = LinkJavaMySQL.selectQuery(query);
             
             while(rs.next()){
@@ -55,7 +52,7 @@ public class GetData {
     }
     
     /**
-     * 
+     * Returns the user login information
      * @return string[]
      */
     public static String[] getLoginInfo(){
@@ -71,57 +68,10 @@ public class GetData {
                 data[1] = passw;
             }
             rs.close();
-        }catch(Exception e){
+        }
+        catch(Exception e){
             System.out.println(e);
         }
         return data;
-    }
-    
-   /**
-    * 
-    * @param args
-    * @throws Exception 
-    */
-    public static void main(String[] args) throws Exception{
-        //Scanner scanner = new Scanner(System.in);
-        //Scanner user = new Scanner(System.in);
-        //System.out.println("Enter username");
-        String username = "natalie";
-            
-        //Scanner pass_word = new Scanner(System.in);
-        //System.out.println("Enter password");
-        String password = "password";
-        
-        usr = username;
-        pass = password;
-        //Currently suing this to simulate how the method works
-        //To be connected with other classes
-        getCurrentData("collected_data");
-        getLoginInfo();
-    }
-  
-    /**
-     * This method is used to send the queries for the database to the server 
-     * @param query
-     * @return 
-     */
-    public static byte[] sendMessageToServer(String query){
-        String source = "cpi"; //The source is the control pi
-        String destination = "dtb"; //The destination is the database 
-        String q = query; //The query the database needs to process
-        String message = source + destination + q;
-        byte[] b = message.getBytes();
-        return b;
-    }
-    
-    /**
-     * 
-     * @param message
-     * @return 
-     */
-    public static String receiveMessageFromServer(byte[] message){
-        //convert the message to string first
-        String str = new String(message, StandardCharsets.UTF_8);
-        return str;
     }
 }
