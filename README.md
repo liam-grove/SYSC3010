@@ -1,4 +1,4 @@
-# SYSC3010
+# SYSC3010 Project Setup Guide
  Shared files for SYSC3010
  
  All project code is stored in the SYSC3010/Term Project/ directory. Inside that directory, there will be 3 folders and a ZIP file: Software Code, System Code, Test Code, and GEMapp.zip. The Software Code directory contains all the files required for the Control Pi. The System Code directory contains all the files required for the Server, Data Pi, and Arduino. The Test Code directory contains files used for testing the system, primarily related to hardware testing with the Arduino. The GEMapp.zip folder contains a copy of the Android Studio project required to run the Monitoring App.
