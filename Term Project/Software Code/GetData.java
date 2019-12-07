@@ -14,7 +14,8 @@ import java.util.Arrays;
  */
 public class GetData {
 
-    public static String usr = Login.getUsername();
+    public static String usr = "natalie";
+    public static String pass = "password";
     
     /**
      * Gets the current data of the user and displays it.
