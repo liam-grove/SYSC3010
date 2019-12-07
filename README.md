@@ -16,6 +16,7 @@ For the Data Pi:
    - To run the Pi in standalone mode, simply use connected interface devices to access the terminal, navigate to the Desktop directory and run the file using the process in Step 3.
 
 For the Control Pi:
+   
    Note: This project is best to be set up using NetBeans 8.0 and later.
 
    - Download mysql-connector-java-8.0.18.jar file.
