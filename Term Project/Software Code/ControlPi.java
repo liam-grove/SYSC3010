@@ -32,7 +32,8 @@ public class ControlPi {
                 waterTime = rs.getTime("Time_off");
             }
             rs.close();
-        }catch (Exception e){
+        }
+        catch (Exception e){
             System.out.println(e);
         }
         return waterTime;
@@ -51,7 +52,8 @@ public class ControlPi {
                 temp = rs.getFloat("Temperature");
             }
             rs.close();
-        }catch (Exception e){
+        }
+        catch (Exception e){
             System.out.println(e);
         }
         return temp;
@@ -70,7 +72,8 @@ public class ControlPi {
                 hum = rs.getFloat("Humidity");
             }
             rs.close();
-        }catch (Exception e){
+        }
+        catch (Exception e){
             System.out.println(e);
         }
         return hum;
@@ -89,7 +92,8 @@ public class ControlPi {
                 light = rs.getInt("Hours_ON");
             }
             rs.close();
-        }catch (Exception e){
+        }
+        catch (Exception e){
             System.out.println(e);
         }
         return light;
@@ -108,7 +112,7 @@ public class ControlPi {
 
             int row = 0;
             while(rs.next()){
-                Date date = rs.getTimestamp("DateTime");
+                TimeStamp date = rs.getTimestamp("DateTime");
                 Float temp = rs.getFloat("Temperature");
                 Float hum = rs.getFloat("Humidity");
                 int light = rs.getInt("LightLevel");
