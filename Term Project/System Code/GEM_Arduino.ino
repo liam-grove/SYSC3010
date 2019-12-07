@@ -36,10 +36,10 @@ void setup(void) {
 //main sensor reading function
 void loop(void) {
   
-  unsigned long currentMillis = millis();
-  if(currentMillis - previousMillisSensors >= intervalSensors){
-    light = analogRead(photocellPin);
-    int chk = DHT.read11(DHT11_PIN);
+  unsigned long currentMillis = millis(); //check current time
+  if(currentMillis - previousMillisSensors >= intervalSensors){ //determine if periodic task is due to run
+    light = analogRead(photocellPin); //read data from photocell
+    int chk = DHT.read11(DHT11_PIN); //read data from DHT11
     temperature = DHT.temperature;
     humidity = DHT.humidity;
     //Serial.println(light);
@@ -59,9 +59,9 @@ void loop(void) {
 
   //Lighting adjustment
   if(currentMillis - previousMillisLight >= intervalLight){
-    if (light < 750){
-      invertedLight = 1023 - light;   
-      LEDbrightness = map(invertedLight, 0, 1023, 0, 255);  
+    if (light < 750){ //arbitrary value, should ideally be changed to an optimal condition and able to be set by user
+      invertedLight = 1023 - light;  
+      LEDbrightness = map(invertedLight, 0, 1023, 0, 255); //map value from 1023 to 255 for LED
       analogWrite(LEDpin, LEDbrightness);
     }
     else{
@@ -73,12 +73,12 @@ void loop(void) {
   
   //Motor adjustment based on Serial input
   if (Serial.available()) {
-    char c = Serial.read();
+    char c = Serial.read(); //read incoming data from Data Pi
     if (c=='1'){
-      myStepper.step(stepsPerRevolution);
+      myStepper.step(stepsPerRevolution); //rotate motor clockwise to activate
     }
     if (c=='0'){
-      myStepper.step(-stepsPerRevolution);
+      myStepper.step(-stepsPerRevolution); //rotate motor counterclockwise to deactivate
     }
     //Serial.println("Motor active...");
   }
